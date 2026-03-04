@@ -13,17 +13,29 @@ add_subdirectory(external)
 
 add_executable(441Sim main.cpp
         graphics.h
-        util.h
         draw.h
-        sim/MecanumSystem.h
-        sim/MecanumSystem.cpp
-        sim/SimRobot.cpp
-        sim/SimRobot.h
-        sim/SimMotor.cpp
-        sim/SimMotor.h
-        user/arduino/arduinoMain.cpp
-        user/wrappers/arduinoLib.cpp
-        user/wrappers/MotorWrapper.cpp
+        ArduinoRuntime.h
+        ArduinoRuntime.cpp
+        Handle.h
+        MecanumPlant.h
+        MecanumPlant.cpp
+        Pose.h
+        Simulator.h
+        Simulator.cpp
+        hardware/SimButton.h
+        hardware/SimButton.cpp
+        hardware/SimEncoder.h
+        hardware/SimEncoder.cpp
+        hardware/SimMotor.h
+        hardware/SimMotor.cpp
+        capability/Capability.h
+        capability/ReadableButton.h
+        capability/ReadableEncoder.h
+        capability/WriteablePWM.h
+        arduino/ardMain.cpp
+        arduino/Constants.h
+        arduino/Motor.h
+        arduino/Sim.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

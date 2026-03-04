@@ -1,13 +1,23 @@
 //
-// Created by Westly Bouchard on 2/28/26.
+// Created by Westly Bouchard on 3/2/26.
 //
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #include <cmath>
 
-namespace Config {
+namespace Constants {
+    inline double CHASSIS_MASS = 1.0;
+
+    inline double TRACKWIDTH = 0.209;
+
+    inline double WHEELBASE = 0.1;
+
+    inline double WHEEL_MASS = 0.1;
+
+    inline double WHEEL_RADIUS = 0.04;
+
     inline double V_BUS = 6.0;
 
     namespace Motor {
@@ -23,9 +33,6 @@ namespace Config {
         inline double K_V = FREE_SPEED / (V_BUS - I_FREE * R);
     }
 
-    namespace Chassis {
-
-    }
 }
 
-#endif //CONFIG_H
+#endif //CONSTANTS_H

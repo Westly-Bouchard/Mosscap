@@ -13,11 +13,10 @@ using namespace std;
 
 #include "draw.h"
 #include "graphics.h"
-#include "util.h"
+#include "Pose.h"
 
-#include "sim/SimRobot.h"
-
-#include "user/arduino/arduinoMain.h"
+#include "Simulator.h"
+#include "arduino/Sim.h"
 
 int main() {
     const auto res = setUpRenderer("441Sim");
@@ -30,10 +29,7 @@ int main() {
         return 1;
     }
 
-    auto robot = SimRobot({2.5, 1.2, M_PI / 2.0}, 0.002);
-
-    // Run arduino setup routine
-    setup();
+    auto sim = simInit();
 
     double simAccumulator= 0.0;
 
@@ -48,21 +44,21 @@ int main() {
 
         simAccumulator += frame_dt;
 
-        if (ImGui::IsKeyDown(ImGuiKey_UpArrow)) {
-            robot.setInputs(255, 255, 255, 255);
-        } else if (ImGui::IsKeyDown(ImGuiKey_DownArrow)) {
-            robot.setInputs(-255, -255, -255, -255);
-        } else if (ImGui::IsKeyDown(ImGuiKey_LeftArrow)) {
-            robot.setInputs(-255, 255, -255, 255);
-        } else if (ImGui::IsKeyDown(ImGuiKey_RightArrow)) {
-            robot.setInputs(255, -255, 255, -255);
-        } else {
-            robot.setInputs(0, 0, 0, 0);
-        }
+        // if (ImGui::IsKeyDown(ImGuiKey_UpArrow)) {
+        //     robot.setInputs(255, 255, 255, 255);
+        // } else if (ImGui::IsKeyDown(ImGuiKey_DownArrow)) {
+        //     robot.setInputs(-255, -255, -255, -255);
+        // } else if (ImGui::IsKeyDown(ImGuiKey_LeftArrow)) {
+        //     robot.setInputs(-255, 255, -255, 255);
+        // } else if (ImGui::IsKeyDown(ImGuiKey_RightArrow)) {
+        //     robot.setInputs(255, -255, 255, -255);
+        // } else {
+        //     robot.setInputs(0, 0, 0, 0);
+        // }
 
         loop();
 
-        robot.update(simAccumulator);
+        sim->update(simAccumulator);
 
         /* RENDERING */
         glfwPollEvents();
@@ -75,7 +71,7 @@ int main() {
 
         drawDebugWindow();
 
-        drawRobotWindow(robot.getPose());
+        drawRobotWindow(sim->getPose());
 
         render(window);
     }

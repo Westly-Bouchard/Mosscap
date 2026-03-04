@@ -4,6 +4,8 @@
 
 #include "MecanumPlant.h"
 
+#include <cmath>
+
 using namespace std;
 
 MecanumPlant::MecanumPlant(const double chassisMass, const double trackWidth, const double wheelBase,

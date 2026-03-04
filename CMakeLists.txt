@@ -36,6 +36,7 @@ add_executable(441Sim main.cpp
         arduino/Constants.h
         arduino/Motor.h
         arduino/Sim.h
+        arduino/Encoder.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

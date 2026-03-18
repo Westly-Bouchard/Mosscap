@@ -5,8 +5,8 @@
 #include "SimMotor.h"
 
 SimMotor::SimMotor(const double kV, const double kT, const double R, const double vBus) : kV(kV), kT(kT), R(R),
-    vBus(vBus),
-    pwm(0) {
+                                                                                          vBus(vBus),
+                                                                                          pwm(0) {
 }
 
 void SimMotor::writePWM(const int value) {

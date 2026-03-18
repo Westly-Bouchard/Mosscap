@@ -8,7 +8,7 @@
 #include "Capability.h"
 
 struct ReadableEncoder : Capability {
-    virtual int readCount() const = 0;
+    [[nodiscard]] virtual int readCount() const = 0;
 };
 
 #endif //READABLEENCODER_H

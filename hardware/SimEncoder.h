@@ -11,12 +11,13 @@ class SimEncoder final : public ReadableEncoder {
 public:
     explicit SimEncoder(int CPR);
 
-    int readCount() const override;
+    [[nodiscard]] int readCount() const override;
 
-    void setCount(int count);
+    void updatePosition(double offset);
 
 private:
-    int CPR, count;
+    int CPR;
+    double shaftPos;
 };
 
 

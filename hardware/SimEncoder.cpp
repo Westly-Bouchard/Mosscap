@@ -4,13 +4,14 @@
 
 #include "SimEncoder.h"
 
-SimEncoder::SimEncoder(const int CPR) : CPR(CPR), count(0) {
-}
+#include <cmath>
+
+SimEncoder::SimEncoder(const int CPR) : CPR(CPR), shaftPos(0) {}
 
 int SimEncoder::readCount() const {
-    return count;
+    return floor((shaftPos / (2 * M_PI)) * CPR);
 }
 
-void SimEncoder::setCount(const int count) {
-    this->count = count;
+void SimEncoder::updatePosition(const double offset) {
+    shaftPos += offset;
 }

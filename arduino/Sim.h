@@ -22,6 +22,7 @@ inline std::unique_ptr<Simulator> simInit() {
         Constants::WHEEL_RADIUS
     );
 
+    // Set initial position
     robot->setPose({1.5, 1.5, 0});
 
     auto FL_ptr = std::make_unique<SimMotor>(

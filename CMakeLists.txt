@@ -32,11 +32,14 @@ add_executable(441Sim main.cpp
         capability/ReadableButton.h
         capability/ReadableEncoder.h
         capability/WriteablePWM.h
+        capability/ReadableTime.h
         arduino/ardMain.cpp
         arduino/Constants.h
         arduino/Motor.h
         arduino/Sim.h
         arduino/Encoder.h
+        hardware/SimClock.cpp
+        hardware/SimClock.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

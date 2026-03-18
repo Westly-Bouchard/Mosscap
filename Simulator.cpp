@@ -20,6 +20,7 @@ trackWidth(trackWidth),
 wheelBase(wheelBase),
 wheelRadius(wheelRadius),
 simTime(0.0) {
+    // Initialize state
     state = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     // Call into Arduino setup function
@@ -45,15 +46,23 @@ void Simulator::update(double &acc) {
         const double bVy = state.at(4) * c - state.at(3) * s;
         const double bVx = state.at(3) * c + state.at(4) * s;
 
-        // Call the Arduino update function
-        loop();
-
         // Compute velocities of motors (this is needed for torque calculations)
         const double omega_1 = (1 / wheelRadius) * (bVy - bVx - (wheelBase / 2 + trackWidth / 2) * state.at(5));
         const double omega_2 = (1 / wheelRadius) * (bVy + bVx + (wheelBase / 2 + trackWidth / 2) * state.at(5));
         const double omega_3 = (1 / wheelRadius) * (bVy + bVx - (wheelBase / 2 + trackWidth / 2) * state.at(5));
         const double omega_4 = (1 / wheelRadius) * (bVy - bVx + (wheelBase / 2 + trackWidth / 2) * state.at(5));
 
+        // Update encoder shaft positions before calling into arduino code
+
+        FL_encoder->updatePosition(omega_1 * dt);
+        FR_encoder->updatePosition(omega_2 * dt);
+        BL_encoder->updatePosition(omega_3 * dt);
+        BR_encoder->updatePosition(omega_4 * dt);
+
+        // Call the Arduino update function
+        loop();
+
+        // Update plant inputs
         plant.setTorques(
             FL->getTorque(omega_1),
             FR->getTorque(omega_2),
@@ -61,8 +70,13 @@ void Simulator::update(double &acc) {
             BR->getTorque(omega_4)
         );
 
+        // Take simulation step
         stepper.do_step(plant, state, simTime, dt);
         simTime += dt;
+
+        // Update simulated clock
+        clock.updateTime(dt);
+
         acc -= dt;
     }
 }
@@ -106,4 +120,8 @@ SimEncoder& Simulator::registerBLEncoder(unique_ptr<SimEncoder> e) {
 SimEncoder& Simulator::registerBREncoder(unique_ptr<SimEncoder> e) {
     BR_encoder = std::move(e);
     return *BR_encoder;
+}
+
+SimClock& Simulator::getClock() {
+    return clock;
 }

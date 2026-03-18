@@ -9,6 +9,7 @@
 
 #include "Handle.h"
 #include "capability/ReadableEncoder.h"
+#include "capability/ReadableTime.h"
 #include "capability/WriteablePWM.h"
 
 void setup();
@@ -28,14 +29,24 @@ public:
     [[nodiscard]] Handle<WriteablePWM> getPWM(int pin) const;
     [[nodiscard]] Handle<ReadableEncoder> getEncoder(int pin) const;
 
+    [[nodiscard]] Handle<ReadableTime> getClock() const;
+
 private:
-    ArduinoRuntime() = default;
+    ArduinoRuntime();
     ~ArduinoRuntime() = default;
 
     std::unordered_map<int, Handle<WriteablePWM>> pwmMap;
     std::unordered_map<int, Handle<ReadableEncoder>> encoderMap;
+
+    Handle<ReadableTime> clock;
 };
 
+/**
+ * Arduino time functions
+ */
 
+int millis();
+
+int micros();
 
 #endif //ARDUINORUNTIME_H

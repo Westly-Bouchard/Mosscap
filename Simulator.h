@@ -13,6 +13,7 @@ using stepper_t = boost::numeric::odeint::runge_kutta4<std::array<double, 6>>;
 
 #include "Pose.h"
 #include "MecanumPlant.h"
+#include "hardware/SimClock.h"
 #include "hardware/SimEncoder.h"
 #include "hardware/SimMotor.h"
 
@@ -31,9 +32,11 @@ public:
     SimEncoder& registerBLEncoder(std::unique_ptr<SimEncoder> e);
     SimEncoder& registerBREncoder(std::unique_ptr<SimEncoder> e);
 
+    static SimClock& getClock();
+
     void setPose(const Pose &p);
 
-    Pose getPose() const;
+    [[nodiscard]] Pose getPose() const;
 
     void update(double& acc);
 
@@ -41,12 +44,14 @@ private:
     MecanumPlant plant;
     double trackWidth, wheelBase, wheelRadius;
     double simTime;
-    std::array<double, 6> state;
+    std::array<double, 6> state{};
 
     stepper_t stepper;
 
     std::unique_ptr<SimMotor> FL, FR, BL, BR;
     std::unique_ptr<SimEncoder> FL_encoder, FR_encoder, BL_encoder, BR_encoder;
+
+    inline static SimClock clock;
 
     constexpr static double dt = 0.002;
 };

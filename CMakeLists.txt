@@ -43,6 +43,8 @@ add_executable(441Sim main.cpp
         SimulatorNew.cpp
         SimulatorNew.h
         plant/Plant.h
+        plant/MecanumPlant.cpp
+        plant/MecanumPlant.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

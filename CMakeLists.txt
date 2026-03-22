@@ -40,6 +40,9 @@ add_executable(441Sim main.cpp
         arduino/Encoder.h
         hardware/SimClock.cpp
         hardware/SimClock.h
+        SimulatorNew.cpp
+        SimulatorNew.h
+        plant/Plant.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

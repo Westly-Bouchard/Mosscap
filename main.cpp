@@ -52,9 +52,7 @@ int main() {
 
         newFrame();
 
-        drawDebugWindow();
-
-        drawRobotWindow({0, 0, 0});
+        sim->draw();
 
         ImGui::EndFrame();
 

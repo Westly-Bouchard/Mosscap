@@ -19,6 +19,10 @@ public:
 
     explicit MecanumSim(const MecanumConfig &config);
 
+    void draw() override;
+
+    void setPose(double x, double y, double theta);
+
     [[nodiscard]] SimMotor& registerMotor(unsigned int idx, std::unique_ptr<SimMotor> motor);
     [[nodiscard]] SimEncoder& registerEncoder(unsigned int idx, std::unique_ptr<SimEncoder> encoder);
 

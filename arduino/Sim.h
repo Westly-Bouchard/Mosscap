@@ -20,6 +20,7 @@ inline std::unique_ptr<SimulatorBase> simInit() {
 
     // Create robot
     auto robot = std::make_unique<MecanumSim>(config);
+    robot->setPose(1, 1, 0);
 
     // Configuration of motors
     // In theory you could have a different config for each motor if you wanted

@@ -5,7 +5,7 @@
 #ifndef INC_441SIM_MECANUMPLANT_H
 #define INC_441SIM_MECANUMPLANT_H
 
-#include "Plant.h"
+#include "Plant.hpp"
 #include "../config/MecanumConfig.h"
 
 /**

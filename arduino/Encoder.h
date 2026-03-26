@@ -5,7 +5,7 @@
 #ifndef INC_441SIM_ENCODER_H
 #define INC_441SIM_ENCODER_H
 
-#include "../ArduinoRuntime.h"
+#include "ArduinoRuntime.h"
 
 /**
  * Encoder on a robot

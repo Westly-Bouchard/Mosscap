@@ -4,7 +4,7 @@
 
 #include "ArduinoRuntime.h"
 
-#include "sim/SimulatorBase.h"
+#include "../sim/SimulatorBase.h"
 
 ArduinoRuntime::ArduinoRuntime() {
     // Grab clock handle directly from simulator so that the user doesn't have

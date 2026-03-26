@@ -9,11 +9,7 @@ using namespace std;
 #endif
 #include <GLFW/glfw3.h>
 
-#include <boost/numeric/odeint.hpp>
-
-#include "draw.h"
 #include "graphics/graphics.h"
-
 #include "arduino/Sim.h"
 
 int main() {

@@ -7,12 +7,12 @@
 
 #include "../sim/MecanumSim.h"
 #include "../sim/SimulatorBase.h"
-#include "../ArduinoRuntime.h"
+#include "ArduinoRuntime.h"
 
 #include "../hardware/SimEncoder.h"
 #include "../hardware/SimMotor.h"
 
-#include "Constants.h"
+#include "../userCode/Constants.h"
 
 /**
  * Initialize the simulator

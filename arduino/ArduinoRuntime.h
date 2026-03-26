@@ -7,10 +7,10 @@
 
 #include <unordered_map>
 
-#include "Handle.h"
-#include "capability/ReadableEncoder.h"
-#include "capability/ReadableTime.h"
-#include "capability/WriteablePWM.h"
+#include "Handle.hpp"
+#include "../capability/ReadableEncoder.h"
+#include "../capability/ReadableTime.h"
+#include "../capability/WriteablePWM.h"
 
 void setup();
 

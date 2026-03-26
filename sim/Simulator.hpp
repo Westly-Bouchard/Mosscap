@@ -13,9 +13,9 @@
 #include <boost/numeric/odeint.hpp>
 
 // Project Includes
-#include "../ArduinoRuntime.h"
+#include "../arduino/ArduinoRuntime.h"
 #include "SimulatorBase.h"
-#include "../plant/Plant.h"
+#include "../plant/Plant.hpp"
 #include "../hardware/SimClock.h"
 
 /**
@@ -23,7 +23,7 @@
  * To be implemented for specific robots (Mecanum, Tank, etc.)
  */
 template <unsigned int numStates, unsigned int numInputs>
-class SimulatorNew : public SimulatorBase {
+class Simulator : public SimulatorBase {
 public:
     // Why are there so many scopes. So, so many
     using stepper_t = boost::numeric::odeint::runge_kutta4<std::array<double, numStates>>;
@@ -32,7 +32,7 @@ public:
      * Construct simulator, calls Arduino `setup()` function
      * @param timestep Simulation timestep, default is 0.002 (500Hz)
      */
-    explicit SimulatorNew(const double timestep=0.002) : dt(timestep), simTime(0.0) {
+    explicit Simulator(const double timestep=0.002) : dt(timestep), simTime(0.0) {
         // User code setup function
         setup();
     }

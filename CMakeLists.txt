@@ -13,11 +13,9 @@ add_subdirectory(external)
 
 add_executable(441Sim main.cpp
         graphics/graphics.h
-        draw.h
-        ArduinoRuntime.h
-        ArduinoRuntime.cpp
-        Handle.h
-        Pose.h
+        arduino/ArduinoRuntime.h
+        arduino/ArduinoRuntime.cpp
+        arduino/Handle.hpp
         hardware/SimButton.h
         hardware/SimButton.cpp
         hardware/SimEncoder.h
@@ -29,15 +27,15 @@ add_executable(441Sim main.cpp
         capability/ReadableEncoder.h
         capability/WriteablePWM.h
         capability/ReadableTime.h
-        arduino/ardMain.cpp
-        arduino/Constants.h
+        userCode/ardMain.cpp
+        userCode/Constants.h
         arduino/Motor.h
         arduino/Sim.h
         arduino/Encoder.h
         hardware/SimClock.cpp
         hardware/SimClock.h
-        sim/SimulatorNew.hpp
-        plant/Plant.h
+        sim/Simulator.hpp
+        plant/Plant.hpp
         plant/MecanumPlant.cpp
         plant/MecanumPlant.h
         sim/MecanumSim.cpp

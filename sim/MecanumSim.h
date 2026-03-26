@@ -7,12 +7,12 @@
 
 #include <array>
 
-#include "SimulatorNew.hpp"
+#include "Simulator.hpp"
 #include "../config/MecanumConfig.h"
 #include "../hardware/SimMotor.h"
 #include "../hardware/SimEncoder.h"
 
-class MecanumSim : public SimulatorNew<6, 4> {
+class MecanumSim : public Simulator<6, 4> {
 public:
     /**
      * Motor and encoder indices to make initialization easier in Sim.h

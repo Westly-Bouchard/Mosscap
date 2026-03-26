@@ -6,26 +6,21 @@
 
 #include <cmath>
 
+using namespace std;
+
 MecanumPlant::MecanumPlant(const double m, const double tW, const double wB, const double wR) : wheelRadius(wR),
 	wheelBase(wB), trackWidth(tW), m_e(m), I_e((1.0 / 12.0) * m * (pow(tW, 2) + pow(wB, 2))) {}
 
-void MecanumPlant::setTorques(const double FL, const double FR, const double BL, const double BR) {
-    torques.at(0) = FL;
-    torques.at(1) = FR;
-    torques.at(2) = BL;
-    torques.at(3) = BR;
-}
-
 void MecanumPlant::operator()(const state_t &x, state_t &dxdt, double t) const {
     // Calculate forces in the body frame
-    const double bFy = (torques.at(0) + torques.at(1) + torques.at(2) +
-                        torques.at(3)) / wheelRadius;
+    const double bFy = (inputs.at(0) + inputs.at(1) + inputs.at(2) +
+                        inputs.at(3)) / wheelRadius;
 
-    const double bFx = (-torques.at(0) + torques.at(1) + torques.at(2) -
-                        torques.at(3)) / wheelRadius;
+    const double bFx = (-inputs.at(0) + inputs.at(1) + inputs.at(2) -
+                        inputs.at(3)) / wheelRadius;
 
-    const double bTz = -(wheelBase / 2 + trackWidth / 2) * (torques.at(0) -
-                        torques.at(1) + torques.at(2) - torques.at(3)) /
+    const double bTz = -(wheelBase / 2 + trackWidth / 2) * (inputs.at(0) -
+                        inputs.at(1) + inputs.at(2) - inputs.at(3)) /
                         wheelRadius;
 
     // Transform forces into the world frame

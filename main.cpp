@@ -29,7 +29,7 @@ int main() {
         return 1;
     }
 
-    auto sim = simInit();
+    const auto sim = simInit();
 
     double simAccumulator= 0.0;
 
@@ -37,26 +37,11 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
         /* PHYSICS SIMULATION */
-
         auto now = std::chrono::high_resolution_clock::now();
         const double frame_dt = std::chrono::duration<double>(now - lastTime).count();
         lastTime = now;
 
         simAccumulator += frame_dt;
-
-        // if (ImGui::IsKeyDown(ImGuiKey_UpArrow)) {
-        //     robot.setInputs(255, 255, 255, 255);
-        // } else if (ImGui::IsKeyDown(ImGuiKey_DownArrow)) {
-        //     robot.setInputs(-255, -255, -255, -255);
-        // } else if (ImGui::IsKeyDown(ImGuiKey_LeftArrow)) {
-        //     robot.setInputs(-255, 255, -255, 255);
-        // } else if (ImGui::IsKeyDown(ImGuiKey_RightArrow)) {
-        //     robot.setInputs(255, -255, 255, -255);
-        // } else {
-        //     robot.setInputs(0, 0, 0, 0);
-        // }
-
-        loop();
 
         sim->update(simAccumulator);
 
@@ -72,6 +57,8 @@ int main() {
         drawDebugWindow();
 
         drawRobotWindow(sim->getPose());
+
+        ImGui::End();
 
         render(window);
     }

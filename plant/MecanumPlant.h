@@ -13,7 +13,7 @@
  * Dynamics system for a robot with
  * four mecanum wheels
  */
-class MecanumPlant final : public Plant {
+class MecanumPlant final : public Plant<6, 4> {
 public:
     /**
      * Construct a mecanum plant
@@ -23,15 +23,6 @@ public:
      * @param wR Wheel radius in meters
      */
     MecanumPlant(double m, double tW, double wB, double wR);
-
-    /**
-     * Update the state of the plant with the current motor torques
-     * @param FL Torque being produced by the front left motor
-     * @param FR Torque being produced by the front right motor
-     * @param BL Torque being produced by the back left motor
-     * @param BR Torque being produced by the back right motor
-     */
-    void setTorques(double FL, double FR, double BL, double BR);
 
     /**
      * To be used when stepping a system, inherited from @link Plant
@@ -47,11 +38,6 @@ private:
      */
     const double wheelRadius, wheelBase, trackWidth;
     const double m_e, I_e;
-
-    /**
-     * Internal state for force calculations in physics updates
-     */
-    std::array<double, 4> torques{};
 };
 
 

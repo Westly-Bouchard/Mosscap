@@ -115,8 +115,6 @@ inline void drawRobotWindow(Pose p) {
     }
 
     draw_list->AddConvexPolyFilled(points, 4, ImColor(255, 255, 255));
-
-    ImGui::End();
 }
 
 #endif //INC_441SIM_DRAW_H

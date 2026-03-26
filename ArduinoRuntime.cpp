@@ -4,12 +4,12 @@
 
 #include "ArduinoRuntime.h"
 
-#include "Simulator.h"
+#include "sim/SimulatorBase.h"
 
 ArduinoRuntime::ArduinoRuntime() {
     // Grab clock handle directly from simulator so that the user doesn't have
     // to do it in Sim.h
-    SimClock& c = Simulator::getClock();
+    SimClock& c = SimulatorBase::getClock();
     clock = Handle{&dynamic_cast<ReadableTime&>(c)};
 }
 

@@ -8,7 +8,7 @@ bool SimButton::digitalRead() const {
     return state;
 }
 
-void SimButton::setState(const bool state) {
-    this->state = state;
+void SimButton::setState(const bool s) {
+    this->state = s;
 }
 

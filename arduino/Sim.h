@@ -14,6 +14,12 @@
 
 #include "Constants.h"
 
+/**
+ * Initialize the simulator
+ * This is where a user would set up a specific simulator
+ * for their code.
+ * @return Pointer to sim
+ */
 inline std::unique_ptr<SimulatorBase> simInit() {
     // Configuration of the robot
     MecanumConfig config{Constants::CHASSIS_MASS, Constants::TRACKWIDTH, Constants::WHEELBASE, Constants::WHEEL_RADIUS};

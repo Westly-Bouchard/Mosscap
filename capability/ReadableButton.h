@@ -7,8 +7,17 @@
 
 #include "Capability.h"
 
+/**
+ * Represents the ability of a piece of simulated hardware to
+ * be read as a button.
+ */
 struct ReadableButton : Capability {
-    virtual bool digitalRead() const = 0;
+    /**
+     *  Analogous to Arduino digitalRead() if pin is attached to a button
+     *  To be implemented by an actual piece of hardware
+     * @return State of the button, HIGH or LOW
+     */
+    [[nodiscard]] virtual bool digitalRead() const = 0;
 };
 
 #endif //READABLEBUTTON_H

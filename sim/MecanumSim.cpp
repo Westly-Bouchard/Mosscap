@@ -72,6 +72,7 @@ SimEncoder& MecanumSim::registerEncoder(const unsigned int idx, std::unique_ptr<
     return *encoders.at(idx);
 }
 
+// TODO: This entire structure / method of drawing is bad and should be rewritten
 #include "../graphics/drawHelpers.h"
 
 using namespace Helpers;
@@ -110,7 +111,7 @@ void MecanumSim::draw() {
     endVizWindow();
 
     beginTelemetryWindow();
-
+    // Write basic telemetry
     if (ImGui::CollapsingHeader("Robot Position", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Text("X\t: %4.2f", state.at(0));
         ImGui::Text("Y\t: %4.2f", state.at(1));

@@ -5,6 +5,9 @@
 #ifndef INC_441SIM_MOTORCONFIG_H
 #define INC_441SIM_MOTORCONFIG_H
 
+/**
+ * Configuration of a simulated brushed DC motor
+ */
 struct MotorConfig {
     const double kV;
     const double kT;

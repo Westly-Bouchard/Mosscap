@@ -19,7 +19,7 @@
 #include "../hardware/SimClock.h"
 
 /**
- * Simulator base class
+ * Middleman that abstracts common functionality
  * To be implemented for specific robots (Mecanum, Tank, etc.)
  */
 template <unsigned int numStates, unsigned int numInputs>
@@ -111,6 +111,5 @@ private:
      */
     stepper_t stepper;
 };
-
 
 #endif //INC_441SIM_SIMULATORNEW_H

@@ -5,8 +5,6 @@
 #ifndef INC_441SIM_MECANUMPLANT_H
 #define INC_441SIM_MECANUMPLANT_H
 
-#include <array>
-
 #include "Plant.h"
 #include "../config/MecanumConfig.h"
 
@@ -36,6 +34,5 @@ private:
      */
     const MecanumConfig& config;
 };
-
 
 #endif //INC_441SIM_MECANUMPLANT_H

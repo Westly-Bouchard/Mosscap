@@ -6,6 +6,9 @@
 #define INC_441SIM_ISIMULATOR_H
 #include "../hardware/SimClock.h"
 
+/**
+ * Base class for simulator
+ */
 class SimulatorBase {
 public:
     virtual ~SimulatorBase() = default;

@@ -8,6 +8,9 @@
 #include "../capability/WriteablePWM.h"
 #include "../config/MotorConfig.h"
 
+/**
+ * Simulated motor
+ */
 class SimMotor final : public WriteablePWM {
 public:
     /**
@@ -36,14 +39,26 @@ public:
      * @param speed Current angular velocity of the motor in rad / sec
      * @return Torque produced by the motor
      */
-    [[nodiscard]] double getTorque(double speed) const;
+    [[nodiscard]] double getTorque(double speed);
+
+    /**
+     * Get the current speed of the motor
+     * This will primarily be used to write telemetry
+     * @return Current angular velocity of shaft
+     */
+    [[nodiscard]] double getSpeed() const;
 
 private:
+    /**
+     * Hardware configuration
+     */
     const MotorConfig config;
 
+    /**
+     * Current hardware state
+     */
     int pwm;
+    double velocity;
 };
-
-
 
 #endif //SIMMOTOR_H

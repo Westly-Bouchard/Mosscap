@@ -7,6 +7,9 @@
 
 #include <cmath>
 
+/**
+ * Configuration of a robot with mecanum drive base
+ */
 struct MecanumConfig {
     const double mass;
     const double trackWidth;

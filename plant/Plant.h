@@ -48,5 +48,4 @@ protected:
     input_t inputs;
 };
 
-
 #endif //INC_441SIM_PLANT_H

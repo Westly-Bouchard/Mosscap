@@ -36,8 +36,7 @@ add_executable(441Sim main.cpp
         arduino/Encoder.h
         hardware/SimClock.cpp
         hardware/SimClock.h
-        sim/SimulatorNew.cpp
-        sim/SimulatorNew.h
+        sim/SimulatorNew.hpp
         plant/Plant.h
         plant/MecanumPlant.cpp
         plant/MecanumPlant.h

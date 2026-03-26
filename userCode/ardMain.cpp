@@ -2,12 +2,12 @@
 // Created by Westly Bouchard on 3/2/26.
 //
 
-#include "../ArduinoRuntime.h"
+#include "../arduino/ArduinoRuntime.h"
 
 #include <iostream>
 
-#include "Encoder.h"
-#include "Motor.h"
+#include "../arduino/Encoder.h"
+#include "../arduino/Motor.h"
 
 Motor FL(9);
 Motor FR(10);
@@ -47,8 +47,6 @@ void loop() {
     } else {
         forward(0);
     }
-
-    std::cout << "FL Encoder Count: " << test.read() << std::endl;
 
     counter++;
 }

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 
 project(441Sim)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
@@ -12,16 +12,10 @@ find_package(Boost REQUIRED)
 add_subdirectory(external)
 
 add_executable(441Sim main.cpp
-        graphics.h
-        draw.h
-        ArduinoRuntime.h
-        ArduinoRuntime.cpp
-        Handle.h
-        MecanumPlant.h
-        MecanumPlant.cpp
-        Pose.h
-        Simulator.h
-        Simulator.cpp
+        graphics/graphics.h
+        arduino/ArduinoRuntime.h
+        arduino/ArduinoRuntime.cpp
+        arduino/Handle.hpp
         hardware/SimButton.h
         hardware/SimButton.cpp
         hardware/SimEncoder.h
@@ -33,13 +27,23 @@ add_executable(441Sim main.cpp
         capability/ReadableEncoder.h
         capability/WriteablePWM.h
         capability/ReadableTime.h
-        arduino/ardMain.cpp
-        arduino/Constants.h
+        userCode/ardMain.cpp
+        userCode/Constants.h
         arduino/Motor.h
         arduino/Sim.h
         arduino/Encoder.h
         hardware/SimClock.cpp
         hardware/SimClock.h
+        sim/Simulator.hpp
+        plant/Plant.hpp
+        plant/MecanumPlant.cpp
+        plant/MecanumPlant.h
+        sim/MecanumSim.cpp
+        sim/MecanumSim.h
+        config/MecanumConfig.h
+        sim/SimulatorBase.h
+        config/MotorConfig.h
+        graphics/drawHelpers.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

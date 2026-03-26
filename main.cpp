@@ -9,13 +9,7 @@ using namespace std;
 #endif
 #include <GLFW/glfw3.h>
 
-#include <boost/numeric/odeint.hpp>
-
-#include "draw.h"
-#include "graphics.h"
-#include "Pose.h"
-
-#include "Simulator.h"
+#include "graphics/graphics.h"
 #include "arduino/Sim.h"
 
 int main() {
@@ -29,7 +23,7 @@ int main() {
         return 1;
     }
 
-    auto sim = simInit();
+    const auto sim = simInit();
 
     double simAccumulator= 0.0;
 
@@ -37,26 +31,11 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
         /* PHYSICS SIMULATION */
-
         auto now = std::chrono::high_resolution_clock::now();
         const double frame_dt = std::chrono::duration<double>(now - lastTime).count();
         lastTime = now;
 
         simAccumulator += frame_dt;
-
-        // if (ImGui::IsKeyDown(ImGuiKey_UpArrow)) {
-        //     robot.setInputs(255, 255, 255, 255);
-        // } else if (ImGui::IsKeyDown(ImGuiKey_DownArrow)) {
-        //     robot.setInputs(-255, -255, -255, -255);
-        // } else if (ImGui::IsKeyDown(ImGuiKey_LeftArrow)) {
-        //     robot.setInputs(-255, 255, -255, 255);
-        // } else if (ImGui::IsKeyDown(ImGuiKey_RightArrow)) {
-        //     robot.setInputs(255, -255, 255, -255);
-        // } else {
-        //     robot.setInputs(0, 0, 0, 0);
-        // }
-
-        loop();
 
         sim->update(simAccumulator);
 
@@ -69,9 +48,9 @@ int main() {
 
         newFrame();
 
-        drawDebugWindow();
+        sim->draw();
 
-        drawRobotWindow(sim->getPose());
+        ImGui::EndFrame();
 
         render(window);
     }

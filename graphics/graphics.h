@@ -17,12 +17,23 @@
 
 #include <iostream>
 
+/**
+ * Color to clear the screen with
+ */
 constexpr auto CLEAR_COLOR = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+/**
+ * Used by glfw to notify use of internal errors
+ */
 static void glfw_error_callback(const int error, const char* description) {
     std::cerr << "GLFW Error: " << error << " " << description << std::endl;
 }
 
+/**
+ * Create a window
+ * @param windowName Name of the window
+ * @return optional with window pointer
+ */
 inline std::optional<GLFWwindow*> setUpRenderer(const char* windowName) {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) {
@@ -62,7 +73,7 @@ inline std::optional<GLFWwindow*> setUpRenderer(const char* windowName) {
 
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(static_cast<int>(1280 * main_scale), static_cast<int>(1050 * main_scale),
+    GLFWwindow *window = glfwCreateWindow(static_cast<int>(1280 * main_scale), static_cast<int>(800 * main_scale),
                                           windowName, nullptr, nullptr);
     if (window == nullptr) {
         std::cerr << "Failed to initialize GLFW window" << std::endl;
@@ -76,6 +87,7 @@ inline std::optional<GLFWwindow*> setUpRenderer(const char* windowName) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+    // These probably aren't needed, just taken from ImGui example code
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -94,6 +106,10 @@ inline std::optional<GLFWwindow*> setUpRenderer(const char* windowName) {
     return window;
 }
 
+/**
+ * Wrapper to make rendering a frame simpler from the perspective of the user
+ * @param window Window to render into
+ */
 inline void render(GLFWwindow* window) {
     ImGui::Render();
     int display_w, display_h;
@@ -107,12 +123,20 @@ inline void render(GLFWwindow* window) {
     glfwSwapBuffers(window);
 }
 
+/**
+ * Start ImGui frame
+ */
 inline void newFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
+/**
+ * Clean up resources
+ * Wrapper for cleanliness
+ * @param window Window to clean up
+ */
 inline void cleanup(GLFWwindow* window) {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

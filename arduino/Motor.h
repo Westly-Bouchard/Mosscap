@@ -5,22 +5,44 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include "../ArduinoRuntime.h"
+#include "ArduinoRuntime.h"
 
+/**
+ * Motor on a robot
+ */
 class Motor {
 public:
-    explicit Motor(const int pinA) : pin(pinA) {}
+    /**
+     * Construct a motor
+     * For simulation purposes, pinA is the only important one
+     * @param pinA Direction 1 pin
+     * @param pinB Direction 2 pin
+     * @param enable Enable pin (pwm)
+     */
+    
+    Motor(const int pinA, const int pinB, const int enable) : pin(pinA) {}
 
+    /**
+     * Simulation specific constructor
+     * To be used if the codebase is only in simulation, where
+     * other motor pins don't matter
+     * @param pin Pin to identify the motor
+     */
+    explicit Motor(const int pin) : pin(pin) {}
+
+    /**
+     * Run the motor at a given speed
+     * @param pwm Signed speed between -255 and 255
+     */
     void run(const int pwm) const {
-        const ArduinoRuntime& instance = ArduinoRuntime::getInstance();
-        const auto handle = instance.getPWM(pin);
-        handle->writePWM(pwm);
-        // ArduinoRuntime::getInstance().getPWM(pin)->writePWM(pwm);
+        ArduinoRuntime::getInstance().getPWM(pin)->writePWM(pwm);
     }
 
 private:
+    /**
+     * Identifier to get the correct handle from the simulator when writing
+     */
     int pin;
-    Handle<WriteablePWM> h;
 };
 
 #endif //MOTOR_H

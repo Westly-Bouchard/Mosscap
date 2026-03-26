@@ -7,18 +7,35 @@
 
 #include "../capability/ReadableButton.h"
 
+/**
+ * Simulated button
+ */
 class SimButton final : public ReadableButton {
 public:
+    /**
+     * Default ctor
+     */
     SimButton() = default;
 
-    bool digitalRead() const override;
+    /**
+     * Get current state of button
+     * Overridden from @link ReadableButton
+     * @return State of button
+     */
+    [[nodiscard]] bool digitalRead() const override;
 
-    void setState(bool state);
+    /**
+     * Set the current state of the hardware
+     * This is called by the @link Simulator NOT by user code
+     * @param s pressed or unpressed
+     */
+    void setState(bool s);
 
 private:
-    bool state;
+    /**
+     * Current state of the hardware
+     */
+    bool state{false};
 };
-
-
 
 #endif //SIMBUTTON_H

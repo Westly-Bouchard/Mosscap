@@ -4,12 +4,10 @@
 
 #include "SimClock.h"
 
-SimClock::SimClock() : simTime(0.0) {}
-
 double SimClock::readTime() const {
-    return simTime;
+    return time;
 }
 
 void SimClock::updateTime(const double dt) {
-    simTime += dt;
+    time += dt;
 }

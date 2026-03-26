@@ -5,80 +5,58 @@
 #ifndef SIM_H
 #define SIM_H
 
-#include "../Simulator.h"
-#include "../ArduinoRuntime.h"
+#include "../sim/MecanumSim.h"
+#include "../sim/SimulatorBase.h"
+#include "ArduinoRuntime.h"
 
 #include "../hardware/SimEncoder.h"
 #include "../hardware/SimMotor.h"
 
-#include "Constants.h"
+#include "../userCode/Constants.h"
 
-inline std::unique_ptr<Simulator> simInit() {
-    auto robot = std::make_unique<Simulator>(
-        Constants::CHASSIS_MASS,
-        Constants::TRACKWIDTH,
-        Constants::WHEELBASE,
-        Constants::WHEEL_MASS,
-        Constants::WHEEL_RADIUS
-    );
+/**
+ * Initialize the simulator
+ * This is where a user would set up a specific simulator
+ * for their code.
+ * @return Pointer to sim
+ */
+inline std::unique_ptr<SimulatorBase> simInit() {
+    // Configuration of the robot
+    MecanumConfig config{Constants::CHASSIS_MASS, Constants::TRACKWIDTH, Constants::WHEELBASE, Constants::WHEEL_RADIUS};
 
-    // Set initial position
-    robot->setPose({1.5, 1.5, 0});
+    // Create robot
+    auto robot = std::make_unique<MecanumSim>(config);
+    robot->setPose(1, 1, 0);
 
-    auto FL_ptr = std::make_unique<SimMotor>(
-        Constants::Motor::K_V,
-        Constants::Motor::K_T,
-        Constants::Motor::R,
-        Constants::V_BUS
-    );
+    // Configuration of motors
+    // In theory you could have a different config for each motor if you wanted
+    // But in this case each motor is exactly the same
+    MotorConfig mConfig{Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS};
 
-    // Create a motor
-    SimMotor& FL = robot->registerFLMotor(std::move(FL_ptr));
-
-    // Wire it to the arduino runtime
+    // Create motors and register them with the ArduinoRuntime
+    auto& FL = robot->registerMotor(MecanumSim::FL, std::make_unique<SimMotor>(mConfig));
     ArduinoRuntime::getInstance().bindPWM(9, FL);
 
-    // Repeat for other hardware
-    SimMotor& FR = robot->registerFRMotor(std::make_unique<SimMotor>(
-        Constants::Motor::K_V,
-        Constants::Motor::K_T,
-        Constants::Motor::R,
-        Constants::V_BUS
-    ));
-
-    // Wire it to the arduino runtime
+    auto& FR = robot->registerMotor(MecanumSim::FR, std::make_unique<SimMotor>(mConfig));
     ArduinoRuntime::getInstance().bindPWM(10, FR);
 
-    SimMotor& BL = robot->registerBLMotor(std::make_unique<SimMotor>(
-        Constants::Motor::K_V,
-        Constants::Motor::K_T,
-        Constants::Motor::R,
-        Constants::V_BUS
-    ));
-
-    // Wire it to the arduino runtime
+    auto& BL = robot->registerMotor(MecanumSim::BL, std::make_unique<SimMotor>(mConfig));
     ArduinoRuntime::getInstance().bindPWM(11, BL);
 
-    SimMotor& BR = robot->registerBRMotor(std::make_unique<SimMotor>(
-        Constants::Motor::K_V,
-        Constants::Motor::K_T,
-        Constants::Motor::R,
-        Constants::V_BUS
-    ));
-
-    // Wire it to the arduino runtime
+    auto& BR = robot->registerMotor(MecanumSim::BR, std::make_unique<SimMotor>(mConfig));
     ArduinoRuntime::getInstance().bindPWM(12, BR);
 
-    SimEncoder& FL_encoder = robot->registerFLEncoder(std::make_unique<SimEncoder>(1500));
+    // Create encoders and register them with the ArduinoRuntime
+    SimEncoder& FL_encoder = robot->registerEncoder(MecanumSim::FL, std::make_unique<SimEncoder>(1500));
     ArduinoRuntime::getInstance().bindEncoder(20, FL_encoder);
 
-    SimEncoder& FR_encoder = robot->registerFREncoder(std::make_unique<SimEncoder>(1500));
+    SimEncoder& FR_encoder = robot->registerEncoder(MecanumSim::FR, std::make_unique<SimEncoder>(1500));
     ArduinoRuntime::getInstance().bindEncoder(21, FR_encoder);
 
-    SimEncoder& BL_encoder = robot->registerBLEncoder(std::make_unique<SimEncoder>(1500));
+    SimEncoder& BL_encoder = robot->registerEncoder(MecanumSim::BL, std::make_unique<SimEncoder>(1500));
     ArduinoRuntime::getInstance().bindEncoder(22, BL_encoder);
 
-    SimEncoder& BR_encoder = robot->registerBREncoder(std::make_unique<SimEncoder>(1500));
+    SimEncoder& BR_encoder = robot->registerEncoder(MecanumSim::BR, std::make_unique<SimEncoder>(1500));
     ArduinoRuntime::getInstance().bindEncoder(23, BR_encoder);
 
     return robot;

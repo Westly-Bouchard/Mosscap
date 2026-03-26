@@ -10,9 +10,9 @@
 
 using namespace std;
 
-MecanumSim::MecanumSim(const double m, const double tW, const double wB, const double wR)
-                        :  wheelRadius(wR), wheelBase(wB), trackWidth(tW) {
-    this->plant = std::make_unique<MecanumPlant>(m, tW, wB, wR);
+MecanumSim::MecanumSim(const MecanumConfig &config)
+                        :  config(config) {
+    this->plant = std::make_unique<MecanumPlant>(config);
 }
 
 void MecanumSim::updateHardware() {
@@ -40,8 +40,8 @@ std::array<double, 4> MecanumSim::fwdKinematics() const {
     const double bVy = state.at(4) * c - state.at(3) * s;
     const double bVx = state.at(3) * c + state.at(4) * s;
 
-    const double oOR = 1 / wheelRadius;
-    const double mid = wheelBase / 2 + trackWidth / 2;
+    const double oOR = 1 / config.wheelRadius;
+    const double mid = config.wheelBase / 2 + config.trackWidth / 2;
     const double w = state.at(5);
 
     return {
@@ -50,4 +50,14 @@ std::array<double, 4> MecanumSim::fwdKinematics() const {
         oOR * (bVy + bVx - mid * w),
         oOR * (bVy - bVx + mid * w)
     };
+}
+
+SimMotor& MecanumSim::registerMotor(const unsigned int idx, std::unique_ptr<SimMotor> motor) {
+    motors.at(idx) = std::move(motor);
+    return *motors.at(idx);
+}
+
+SimEncoder& MecanumSim::registerEncoder(const unsigned int idx, std::unique_ptr<SimEncoder> encoder) {
+    encoders.at(idx) = std::move(encoder);
+    return *encoders.at(idx);
 }

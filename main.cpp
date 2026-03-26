@@ -12,10 +12,8 @@ using namespace std;
 #include <boost/numeric/odeint.hpp>
 
 #include "draw.h"
-#include "graphics.h"
-#include "Pose.h"
+#include "graphics/graphics.h"
 
-#include "Simulator.h"
 #include "arduino/Sim.h"
 
 int main() {
@@ -56,9 +54,9 @@ int main() {
 
         drawDebugWindow();
 
-        drawRobotWindow(sim->getPose());
+        drawRobotWindow({0, 0, 0});
 
-        ImGui::End();
+        ImGui::EndFrame();
 
         render(window);
     }

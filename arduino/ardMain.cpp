@@ -48,7 +48,5 @@ void loop() {
         forward(0);
     }
 
-    std::cout << "FL Encoder Count: " << test.read() << std::endl;
-
     counter++;
 }

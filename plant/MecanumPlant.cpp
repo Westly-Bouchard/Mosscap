@@ -8,20 +8,19 @@
 
 using namespace std;
 
-MecanumPlant::MecanumPlant(const double m, const double tW, const double wB, const double wR) : wheelRadius(wR),
-	wheelBase(wB), trackWidth(tW), m_e(m), I_e((1.0 / 12.0) * m * (pow(tW, 2) + pow(wB, 2))) {}
+MecanumPlant::MecanumPlant(const MecanumConfig& config) : config(config) {}
 
 void MecanumPlant::operator()(const state_t &x, state_t &dxdt, double t) const {
     // Calculate forces in the body frame
     const double bFy = (inputs.at(0) + inputs.at(1) + inputs.at(2) +
-                        inputs.at(3)) / wheelRadius;
+                        inputs.at(3)) / config.wheelRadius;
 
     const double bFx = (-inputs.at(0) + inputs.at(1) + inputs.at(2) -
-                        inputs.at(3)) / wheelRadius;
+                        inputs.at(3)) / config.wheelRadius;
 
-    const double bTz = -(wheelBase / 2 + trackWidth / 2) * (inputs.at(0) -
+    const double bTz = -(config.wheelBase / 2 + config.trackWidth / 2) * (inputs.at(0) -
                         inputs.at(1) + inputs.at(2) - inputs.at(3)) /
-                        wheelRadius;
+                        config.wheelRadius;
 
     // Transform forces into the world frame
     const double s = sin(x.at(2));
@@ -36,7 +35,7 @@ void MecanumPlant::operator()(const state_t &x, state_t &dxdt, double t) const {
     dxdt.at(1) = x.at(4);
     dxdt.at(2) = x.at(5);
 
-    dxdt.at(3) = (1.0 / m_e) * wFx;
-    dxdt.at(4) = (1.0 / m_e) * wFy;
-    dxdt.at(5) = (1.0 / I_e) * wTz;
+    dxdt.at(3) = (1.0 / config.mass) * wFx;
+    dxdt.at(4) = (1.0 / config.mass) * wFy;
+    dxdt.at(5) = (1.0 / config.inertia) * wTz;
 }

@@ -12,14 +12,12 @@ find_package(Boost REQUIRED)
 add_subdirectory(external)
 
 add_executable(441Sim main.cpp
-        graphics.h
+        graphics/graphics.h
         draw.h
         ArduinoRuntime.h
         ArduinoRuntime.cpp
         Handle.h
         Pose.h
-        Simulator.h
-        Simulator.cpp
         hardware/SimButton.h
         hardware/SimButton.cpp
         hardware/SimEncoder.h
@@ -47,6 +45,8 @@ add_executable(441Sim main.cpp
         sim/MecanumSim.h
         config/MecanumConfig.h
         sim/SimulatorBase.h
+        config/MotorConfig.h
+        graphics/drawHelpers.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

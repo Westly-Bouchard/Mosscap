@@ -8,6 +8,7 @@
 #include <array>
 
 #include "Plant.h"
+#include "../config/MecanumConfig.h"
 
 /**
  * Dynamics system for a robot with
@@ -16,13 +17,10 @@
 class MecanumPlant final : public Plant<6, 4> {
 public:
     /**
-     * Construct a mecanum plant
-     * @param m Mass of the robot in kilograms
-     * @param tW Trackwidth in meters
-     * @param wB Wheelbase in meters
-     * @param wR Wheel radius in meters
+     * Construct a plant object with the provided @link MecanumConfig
+     * @param config Configuration of the system
      */
-    MecanumPlant(double m, double tW, double wB, double wR);
+    explicit MecanumPlant(const MecanumConfig& config);
 
     /**
      * To be used when stepping a system, inherited from @link Plant
@@ -36,8 +34,7 @@ private:
     /**
      * Necessary physical constants for force calculations
      */
-    const double wheelRadius, wheelBase, trackWidth;
-    const double m_e, I_e;
+    const MecanumConfig& config;
 };
 
 

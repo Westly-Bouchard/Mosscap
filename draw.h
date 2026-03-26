@@ -71,7 +71,7 @@ inline void drawRobotWindow(Pose p) {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(1016, 1035));
 
-    constexpr ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize;
+    constexpr ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
 
     ImGui::Begin("Robot Position", nullptr, flags);
 
@@ -115,6 +115,8 @@ inline void drawRobotWindow(Pose p) {
     }
 
     draw_list->AddConvexPolyFilled(points, 4, ImColor(255, 255, 255));
+
+    ImGui::End();
 }
 
 #endif //INC_441SIM_DRAW_H

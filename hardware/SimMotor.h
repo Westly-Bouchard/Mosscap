@@ -6,17 +6,40 @@
 #define SIMMOTOR_H
 
 #include "../capability/WriteablePWM.h"
+#include "../config/MotorConfig.h"
 
 class SimMotor final : public WriteablePWM {
 public:
-    SimMotor(double kV, double kT, double R, double vBus);
+    /**
+     * Construct a simulated motor with the given configuration
+     * @param c Config of the motor see @link MotorConfig
+     */
+    explicit SimMotor(const MotorConfig& c);
 
+    /**
+     * Delete copy constructor because copying simulated hardware
+     * would be bad
+     */
+    SimMotor(const SimMotor&) = delete;
+
+    /**
+     * This is inherited from the @link WriteablePWM @link Capability
+     * It is used by the ArduinoRuntime to write values to the motor
+     * This function SHOULD never be called directly
+     * @param value PWM Setpoint of the motor
+     */
     void writePWM(int value) override;
 
-    double getTorque(double speed) const;
+    /**
+     * Get the torque of the motor given a current speed
+     * This would be called by an @link SimulatorNew 's updateHardware function
+     * @param speed Current angular velocity of the motor in rad / sec
+     * @return Torque produced by the motor
+     */
+    [[nodiscard]] double getTorque(double speed) const;
 
 private:
-    double kV, kT, R, vBus;
+    const MotorConfig config;
 
     int pwm;
 };

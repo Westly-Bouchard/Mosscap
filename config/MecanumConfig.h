@@ -8,11 +8,27 @@
 #include <cmath>
 
 struct MecanumConfig {
-    double mass;
-    double trackWidth;
-    double wheelBase;
-    double wheelRadius;
+    const double mass;
+    const double trackWidth;
+    const double wheelBase;
+    const double wheelRadius;
+    const double inertia;
 
+    /**
+     * Construct a mecanum config object with provided physical constants
+     * @param m Total mass of the robot in kilograms
+     * @param tW Track width of the robot in meters
+     * @param wB Wheelbase of the robot in meters
+     * @param wR Wheel radius of the robot in meters
+     */
+    MecanumConfig(const double m, const double tW, const double wB, const double wR) : mass(m), trackWidth(tW),
+        wheelBase(wB), wheelRadius(wR), inertia(getInertia()) {}
+
+private:
+    /**
+     * Calculate the approximate moment of inertia of the robot from provided constants
+     * @return MOI about the z axis
+     */
     [[nodiscard]] double getInertia() const {
         return 1.0 / 12.0 * mass * (pow(trackWidth, 2) + pow(wheelBase, 2));
     }

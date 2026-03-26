@@ -62,7 +62,7 @@ inline std::optional<GLFWwindow*> setUpRenderer(const char* windowName) {
 
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(static_cast<int>(1280 * main_scale), static_cast<int>(1050 * main_scale),
+    GLFWwindow *window = glfwCreateWindow(static_cast<int>(1280 * main_scale), static_cast<int>(800 * main_scale),
                                           windowName, nullptr, nullptr);
     if (window == nullptr) {
         std::cerr << "Failed to initialize GLFW window" << std::endl;

@@ -35,7 +35,7 @@ public:
      * @param pwm Signed speed between -255 and 255
      */
     void run(const int pwm) const {
-        ArduinoRuntime::getInstance().getPWM(pin)->writePWM(pwm);
+        ArduinoRuntime::getInstance().getPWM(pin).get().writePWM(pwm);
     }
 
 private:

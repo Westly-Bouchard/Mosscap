@@ -7,7 +7,9 @@
 
 // Standard library includes
 #include <array>
+#include <chrono>
 #include <functional>
+#include <thread>
 
 // Boos includes
 #include <boost/numeric/odeint.hpp>
@@ -33,8 +35,14 @@ public:
      * @param timestep Simulation timestep, default is 0.002 (500Hz)
      */
     explicit Simulator(const double timestep=0.002) : dt(timestep), simTime(0.0) {
-        // User code setup function
-        setup();
+        // Start user code thread
+        arduinoThread = std::thread(&Simulator::arduinoThreadFunc, this);
+    }
+
+    ~Simulator() override {
+        // Stop user code thread and join
+        arduinoThreadRunning = false;
+        arduinoThread.join();
     }
 
     /**
@@ -48,7 +56,7 @@ public:
             updateHardware();
 
             // Call user code loop function
-            loop();
+            // loop();
 
             // Update plant inputs
             setPlantInputs();
@@ -100,6 +108,32 @@ protected:
 
 private:
     /**
+     * Runs the user's Arduino code through the setup() and loop() functions
+     * This function isn't really associated with this class. But running the
+     * Arduino code is the simulator's job, so it's in here.
+     *
+     * Maybe it should be somewhere else though?
+     */
+    void arduinoThreadFunc() const {
+        // To allow scheduling the next run with sleep_until instead of sleep_for
+        auto nextRun = std::chrono::steady_clock::now();
+        // Run at 1kHz for now, could be made faster if necessary
+        constexpr auto interval = std::chrono::microseconds(1000);
+
+        // Call setup function
+        setup();
+
+        while (arduinoThreadRunning) {
+            nextRun += interval;
+
+            // Call loop
+            loop();
+
+            std::this_thread::sleep_until(nextRun);
+        }
+    }
+
+    /**
      * The other important state variable for the simulator
      * This is passed to the stepper during the physics update
      */
@@ -110,6 +144,9 @@ private:
      * updates the system state
      */
     stepper_t stepper;
+
+    std::atomic_bool arduinoThreadRunning{true};
+    std::thread arduinoThread;
 };
 
 #endif //INC_441SIM_SIMULATORNEW_H

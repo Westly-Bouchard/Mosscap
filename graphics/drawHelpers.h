@@ -5,6 +5,8 @@
 #ifndef INC_441SIM_DRAWHELPERS_H
 #define INC_441SIM_DRAWHELPERS_H
 
+#include <array>
+
 #include <imgui.h>
 
 /**
@@ -105,7 +107,7 @@ namespace Helpers {
         }};
 
         // Rotate and translate each corner
-        for (auto&& [v, p] : std::views::zip(std::views::as_const(vertices), points)) {
+        for (auto&& [v, p] : std::views::zip(vertices, points)) {
             p.x = static_cast<float>((x + (v.x * c - v.y * s)) * pxPerMeter);
             p.y = static_cast<float>((scale - y - (v.x * s + v.y * c)) * pxPerMeter);
         }

@@ -26,7 +26,7 @@ void MecanumSim::setPose(const double x, const double y, const double theta) {
 }
 
 void MecanumSim::updateHardware() {
-    for (const auto vels = fwdKinematics(); auto&& [enc, vel] : views::zip(views::as_const(encoders), vels)) {
+    for (const auto vels = fwdKinematics(); auto&& [enc, vel] : views::zip((encoders), vels)) {
         enc->updatePosition(vel * dt);
     }
 }
@@ -34,8 +34,8 @@ void MecanumSim::updateHardware() {
 void MecanumSim::setPlantInputs() {
     MecanumPlant::input_t torques;
     // Wow I love modern C++ so much, this is so intelligible
-    for (const auto vels = fwdKinematics(); auto &&[motor, vel, torque] : std::views::zip(
-             views::as_const(motors), vels, torques)) {
+    for (const auto vels = fwdKinematics(); auto &&[motor, vel, torque] : views::zip(
+             motors, vels, torques)) {
         torque = motor->getTorque(vel);
     }
 
@@ -94,7 +94,7 @@ void MecanumSim::draw() {
 
     // Draw path
     std::array<ImVec2, pathPoints.size() + 1> vertices;
-    for (auto&& [p, v] : std::views::zip(std::views::as_const(pathPoints), vertices)) {
+    for (auto&& [p, v] : std::views::zip(pathPoints, vertices)) {
         v.x = p.first * pxPerMeter + 400;
         v.y = p.second * pxPerMeter + 400;
     }
@@ -119,10 +119,15 @@ void MecanumSim::draw() {
     }
 
     if (ImGui::CollapsingHeader("Encoders", ImGuiTreeNodeFlags_DefaultOpen)) {
-        for (auto&& [e, label] : std::views::zip(views::as_const(encoders), std::array{"FL", "FR", "BL", "BR"})) {
+        for (auto&& [e, label] : std::views::zip(encoders, std::array{"FL", "FR", "BL", "BR"})) {
             ImGui::Text("%s counts: %i", label, e->readCount());
         }
     }
+
+    const ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+    ImGui::Separator();
+    ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
     endTelemetryWindow();
 }

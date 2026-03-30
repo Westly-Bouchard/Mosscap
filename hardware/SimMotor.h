@@ -26,14 +26,6 @@ public:
     SimMotor(const SimMotor&) = delete;
 
     /**
-     * This is inherited from the @link WriteablePWM @link Capability
-     * It is used by the ArduinoRuntime to write values to the motor
-     * This function SHOULD never be called directly
-     * @param value PWM Setpoint of the motor
-     */
-    void writePWM(int value) override;
-
-    /**
      * Get the torque of the motor given a current speed
      * This would be called by an @link SimulatorNew 's updateHardware function
      * @param speed Current angular velocity of the motor in rad / sec
@@ -57,7 +49,6 @@ private:
     /**
      * Current hardware state
      */
-    int pwm;
     double velocity;
 };
 

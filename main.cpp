@@ -10,7 +10,7 @@ using namespace std;
 #include <GLFW/glfw3.h>
 
 #include "graphics/graphics.h"
-#include "arduino/Sim.h"
+#include "userCode/Sim.h"
 
 int main() {
     const auto res = setUpRenderer("441Sim");

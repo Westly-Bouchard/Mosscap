@@ -5,6 +5,8 @@
 #ifndef SIMMOTOR_H
 #define SIMMOTOR_H
 
+#include <atomic>
+
 #include "../capability/WriteablePWM.h"
 #include "../config/MotorConfig.h"
 
@@ -57,7 +59,7 @@ private:
     /**
      * Current hardware state
      */
-    int pwm;
+    std::atomic_int pwm{0};
     double velocity;
 };
 

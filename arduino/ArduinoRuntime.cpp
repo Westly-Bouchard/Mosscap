@@ -4,14 +4,12 @@
 
 #include "ArduinoRuntime.h"
 
+#include <chrono>
+#include <thread>
+
 #include "../sim/SimulatorBase.h"
 
-ArduinoRuntime::ArduinoRuntime() {
-    // Grab clock handle directly from simulator so that the user doesn't have
-    // to do it in Sim.h
-    SimClock& c = SimulatorBase::getClock();
-    clock = Handle{&dynamic_cast<ReadableTime&>(c)};
-}
+ArduinoRuntime::ArduinoRuntime() : clock(SimulatorBase::getClock()) {}
 
 ArduinoRuntime &ArduinoRuntime::getInstance() {
     static ArduinoRuntime instance;
@@ -19,11 +17,11 @@ ArduinoRuntime &ArduinoRuntime::getInstance() {
 }
 
 void ArduinoRuntime::bindPWM(const int pin, WriteablePWM &pwm) {
-    pwmMap.emplace(pin, Handle{&pwm});
+    pwmMap.emplace(pin, Handle{pwm});
 }
 
 void ArduinoRuntime::bindEncoder(const int pin, ReadableEncoder &encoder) {
-    encoderMap.emplace(pin, Handle{&encoder});
+    encoderMap.emplace(pin, Handle{encoder});
 }
 
 Handle<WriteablePWM> ArduinoRuntime::getPWM(const int pin) const {
@@ -47,9 +45,17 @@ Handle<ReadableTime> ArduinoRuntime::getClock() const {
  */
 
 int millis() {
-    return static_cast<int>(ArduinoRuntime::getInstance().getClock()->readTime() * 1'000);
+    return static_cast<int>(ArduinoRuntime::getInstance().getClock().get().readTime() * 1'000);
 }
 
 int micros() {
-    return static_cast<int>(ArduinoRuntime::getInstance().getClock()->readTime() * 1'000'000);
+    return static_cast<int>(ArduinoRuntime::getInstance().getClock().get().readTime() * 1'000'000);
+}
+
+void delay(const int ms) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+void delayMicroseconds(const int us) {
+    std::this_thread::sleep_for(std::chrono::microseconds(us));
 }

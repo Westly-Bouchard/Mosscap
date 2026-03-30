@@ -9,33 +9,18 @@ template<typename Capability>
 class Handle {
 public:
     /**
-     * Default ctor
-     */
-    Handle() : ptr(nullptr) {}
-
-    /**
      * Construct a handle
-     * @param ptr Pointer to hardware
+     * @param ref Reference to the wrapped capability
      */
-    explicit Handle(Capability* ptr) : ptr(ptr) {}
+    explicit Handle(Capability& ref) : ref(ref) {}
 
-    // Operators
-    Capability& operator*() const {
-        return *ptr;
-    }
-
-    Capability* operator->() const {
-        return ptr;
-    }
+    Capability& get() const { return ref; }
 
 private:
     /**
-     * Pointer to hardware
-     * This is kind of a code smell b/c raw pointers bad.
-     * But, in this case it's necessary because we're not managing this memory
-     * The simulator is.
+     * Actual reference to the wrapped capability
      */
-    Capability* ptr;
+    Capability& ref;
 };
 
 #endif

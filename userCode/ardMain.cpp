@@ -4,8 +4,6 @@
 
 #include "../arduino/ArduinoRuntime.h"
 
-#include <iostream>
-
 #include "../arduino/Encoder.h"
 #include "../arduino/Motor.h"
 
@@ -14,39 +12,27 @@ Motor FR(10);
 Motor BL(11);
 Motor BR(12);
 
-Encoder test(20,21);
+void move(const int pwm, const int time) {
+    FL.run(pwm);
+    FR.run(pwm);
+    BL.run(pwm);
+    BR.run(pwm);
+    delay(time);
+
+    FL.run(0);
+    FR.run(0);
+    BL.run(0);
+    BR.run(0);
+}
 
 void setup() {}
 
-int counter = 0;
-
-void forward(const int pwm) {
-    FL.run(pwm);
-    FR.run(pwm);
-    BL.run(pwm);
-    BR.run(pwm);
-}
-
-void strafe(const int pwm) {
-    FL.run(-pwm);
-    FR.run(pwm);
-    BL.run(pwm);
-    BR.run(-pwm);
-}
-
-void turn(const int pwm) {
-    FL.run(pwm);
-    FR.run(-pwm);
-    BL.run(-pwm);
-    BR.run(pwm);
-}
-
 void loop() {
-    if (millis() < 1000) {
-        forward(150);
-    } else {
-        forward(0);
-    }
+    move(150, 500);
 
-    counter++;
+    delay(500);
+
+    move(-150, 500);
+
+    delay(500);
 }

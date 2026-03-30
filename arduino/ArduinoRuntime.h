@@ -49,4 +49,8 @@ int millis();
 
 int micros();
 
+void delay(int ms);
+
+void delayMicroseconds(int us);
+
 #endif //ARDUINORUNTIME_H

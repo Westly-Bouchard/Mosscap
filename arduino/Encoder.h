@@ -25,7 +25,7 @@ public:
      * @return Current count
      */
     [[nodiscard]] int read() const {
-        return ArduinoRuntime::getInstance().getEncoder(index)->readCount();
+        return ArduinoRuntime::getInstance().getEncoder(index).get().readCount();
     }
 
 private:

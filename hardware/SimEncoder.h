@@ -7,6 +7,8 @@
 
 #include "../capability/ReadableEncoder.h"
 
+#include <atomic>
+
 /**
  * Simulated encoder
  */
@@ -40,7 +42,7 @@ private:
     /**
      * Current state of the hardware
      */
-    double shaftPos;
+    std::atomic<double> shaftPos;
 };
 
 #endif //SIMENCODER_H

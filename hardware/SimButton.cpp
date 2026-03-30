@@ -5,10 +5,10 @@
 #include "SimButton.h"
 
 bool SimButton::digitalRead() const {
-    return state;
+    return state.load();
 }
 
 void SimButton::setState(const bool s) {
-    this->state = s;
+    state.store(s);
 }
 

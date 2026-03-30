@@ -30,7 +30,7 @@ add_executable(441Sim main.cpp
         userCode/ardMain.cpp
         userCode/Constants.h
         arduino/Motor.h
-        arduino/Sim.h
+        userCode/Sim.h
         arduino/Encoder.h
         hardware/SimClock.cpp
         hardware/SimClock.h

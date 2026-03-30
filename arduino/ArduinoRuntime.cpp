@@ -4,6 +4,9 @@
 
 #include "ArduinoRuntime.h"
 
+#include <chrono>
+#include <thread>
+
 #include "../sim/SimulatorBase.h"
 
 ArduinoRuntime::ArduinoRuntime() : clock(SimulatorBase::getClock()) {}
@@ -47,4 +50,12 @@ int millis() {
 
 int micros() {
     return static_cast<int>(ArduinoRuntime::getInstance().getClock().get().readTime() * 1'000'000);
+}
+
+void delay(const int ms) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+void delayMicroseconds(const int us) {
+    std::this_thread::sleep_for(std::chrono::microseconds(us));
 }

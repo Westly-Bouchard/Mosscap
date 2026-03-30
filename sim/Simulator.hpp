@@ -116,20 +116,20 @@ private:
      */
     void arduinoThreadFunc() const {
         // To allow scheduling the next run with sleep_until instead of sleep_for
-        auto nextRun = std::chrono::steady_clock::now();
+        // auto nextRun = std::chrono::steady_clock::now();
         // Run at 1kHz for now, could be made faster if necessary
-        constexpr auto interval = std::chrono::microseconds(1000);
+        // constexpr auto interval = std::chrono::microseconds(1000);
 
         // Call setup function
         setup();
 
         while (arduinoThreadRunning) {
-            nextRun += interval;
+            // nextRun += interval;
 
             // Call loop
             loop();
 
-            std::this_thread::sleep_until(nextRun);
+            // std::this_thread::sleep_until(nextRun);
         }
     }
 

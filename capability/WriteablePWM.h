@@ -5,8 +5,6 @@
 #ifndef WRITEABLEPWM_H
 #define WRITEABLEPWM_H
 
-#include <atomic>
-
 #include "Capability.h"
 
 /**
@@ -14,19 +12,11 @@
  * written to as an analog value (pwm) between -255 and 255.
  */
 struct WriteablePWM : Capability {
-    [[nodiscard]] int get() const {
-       return pwm.load();
-    }
-
-    void writePWM(const int value) {
-        if (value <= 255 && value >= -255) {
-            pwm.store(value);
-        }
-    }
-
-protected:
-    std::atomic_int pwm;
-
+    /**
+     * Write a PWM value to the piece of hardware
+     * @param value Signed integer between -255 and 255
+     */
+    virtual void writePWM(int value) = 0;
 };
 
 #endif //WRITEABLEPWM_H

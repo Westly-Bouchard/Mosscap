@@ -5,6 +5,8 @@
 #ifndef SIMMOTOR_H
 #define SIMMOTOR_H
 
+#include <atomic>
+
 #include "../capability/WriteablePWM.h"
 #include "../config/MotorConfig.h"
 
@@ -24,6 +26,14 @@ public:
      * would be bad
      */
     SimMotor(const SimMotor&) = delete;
+
+    /**
+     * This is inherited from the @link WriteablePWM @link Capability
+     * It is used by the ArduinoRuntime to write values to the motor
+     * This function SHOULD never be called directly
+     * @param value PWM Setpoint of the motor
+     */
+    void writePWM(int value) override;
 
     /**
      * Get the torque of the motor given a current speed
@@ -49,6 +59,7 @@ private:
     /**
      * Current hardware state
      */
+    std::atomic_int pwm;
     double velocity;
 };
 

@@ -59,7 +59,7 @@ private:
     /**
      * Current hardware state
      */
-    std::atomic_int pwm;
+    std::atomic_int pwm{0};
     double velocity;
 };
 

@@ -5,6 +5,8 @@
 #ifndef SIMBUTTON_H
 #define SIMBUTTON_H
 
+#include <atomic>
+
 #include "../capability/ReadableButton.h"
 
 /**
@@ -35,7 +37,7 @@ private:
     /**
      * Current state of the hardware
      */
-    bool state{false};
+    std::atomic_bool state{false};
 };
 
 #endif //SIMBUTTON_H

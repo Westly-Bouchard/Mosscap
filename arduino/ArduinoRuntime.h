@@ -6,6 +6,9 @@
 #define ARDUINORUNTIME_H
 
 #include <unordered_map>
+#include <cmath>
+
+#define PI M_PI
 
 #include "Handle.hpp"
 #include "../capability/ReadableEncoder.h"
@@ -52,5 +55,12 @@ int micros();
 void delay(int ms);
 
 void delayMicroseconds(int us);
+
+template <typename T>
+T constrain(T in, T low, T high) {
+    if (in < low) { return low; }
+    if (in > high) { return high; }
+    return in;
+}
 
 #endif //ARDUINORUNTIME_H

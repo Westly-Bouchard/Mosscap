@@ -11,39 +11,24 @@ find_package(Boost REQUIRED)
 
 add_subdirectory(external)
 
+aux_source_directory(arduino ARDUINO_RUNTIME_SRC)
+aux_source_directory(capability CAPABILITIES_SRC)
+aux_source_directory(config CONFIG_SRC)
+aux_source_directory(graphics GRAPHICS_SRC)
+aux_source_directory(hardware HARDWARE_SRC)
+aux_source_directory(plant PLANT_SRC)
+aux_source_directory(sim SIM_SRC)
+aux_source_directory(userCode USER_SRC)
+
 add_executable(441Sim main.cpp
-        graphics/graphics.h
-        arduino/ArduinoRuntime.h
-        arduino/ArduinoRuntime.cpp
-        arduino/Handle.hpp
-        hardware/SimButton.h
-        hardware/SimButton.cpp
-        hardware/SimEncoder.h
-        hardware/SimEncoder.cpp
-        hardware/SimMotor.h
-        hardware/SimMotor.cpp
-        capability/Capability.h
-        capability/ReadableButton.h
-        capability/ReadableEncoder.h
-        capability/WriteablePWM.h
-        capability/ReadableTime.h
-        userCode/ardMain.cpp
-        userCode/Constants.h
-        arduino/Motor.h
-        userCode/Sim.h
-        arduino/Encoder.h
-        hardware/SimClock.cpp
-        hardware/SimClock.h
-        sim/Simulator.hpp
-        plant/Plant.hpp
-        plant/MecanumPlant.cpp
-        plant/MecanumPlant.h
-        sim/MecanumSim.cpp
-        sim/MecanumSim.h
-        config/MecanumConfig.h
-        sim/SimulatorBase.h
-        config/MotorConfig.h
-        graphics/drawHelpers.h
+    ${ARDUINO_RUNTIME_SRC}
+    ${CAPABILITIES_SRC}
+    ${CONFIG_SRC}
+    ${GRAPHICS_SRC}
+    ${HARDWARE_SRC}
+    ${PLANT_SRC}
+    ${SIM_SRC}
+    ${USER_SRC}
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

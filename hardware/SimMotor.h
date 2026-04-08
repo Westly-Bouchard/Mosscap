@@ -37,7 +37,7 @@ public:
 
     /**
      * Get the torque of the motor given a current speed
-     * This would be called by an @link SimulatorNew 's updateHardware function
+     * This would be called by an @link Simulator 's updateHardware function
      * @param speed Current angular velocity of the motor in rad / sec
      * @return Torque produced by the motor
      */
@@ -59,7 +59,7 @@ private:
     /**
      * Current hardware state
      */
-    std::atomic_int pwm{0};
+    std::atomic_int pwm;
     double velocity;
 };
 

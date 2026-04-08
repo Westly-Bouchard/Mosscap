@@ -22,7 +22,7 @@ MecanumSim::MecanumSim(const MecanumConfig &config)
 void MecanumSim::setPose(const double x, const double y, const double theta) {
     state.at(0) = x;
     state.at(1) = y;
-    state.at(2) = theta * (180.0 / M_PI);
+    state.at(2) = theta * (M_PI / 180.0);
 }
 
 void MecanumSim::updateHardware() {

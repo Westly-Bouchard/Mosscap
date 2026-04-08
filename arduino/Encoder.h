@@ -18,14 +18,22 @@ public:
      * @param pinA pin
      * @param pinB pin
      */
-    Encoder(const int pinA, int pinB) : index(pinA) {}
+    Encoder(const int pinA, int pinB) : index(pinA), offset(0) {}
 
     /**
      * Read the current count on the encoder
      * @return Current count
      */
     [[nodiscard]] int read() const {
-        return ArduinoRuntime::getInstance().getEncoder(index).get().readCount();
+        return ArduinoRuntime::getInstance().getEncoder(index).get().readCount() - offset;
+    }
+
+    [[nodiscard]] int readAndReset() {
+        const int count = ArduinoRuntime::getInstance().getEncoder(index).get().readCount();
+        const int ret = count - offset;
+        offset = count;
+        return ret;
+
     }
 
 private:
@@ -33,6 +41,8 @@ private:
      * Identifier to get the correct handle from the simulator when reading
      */
     int index;
+
+    int offset;
 
 };
 

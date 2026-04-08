@@ -20,7 +20,7 @@ public:
      * @param enable Enable pin (pwm)
      */
     
-    Motor(const int pinA, const int pinB, const int enable) : pin(pinA) {}
+    Motor(const int enable, const int pinA, const int pinB) : pin(pinA) {}
 
     /**
      * Simulation specific constructor
@@ -36,6 +36,10 @@ public:
      */
     void run(const int pwm) const {
         ArduinoRuntime::getInstance().getPWM(pin).get().writePWM(pwm);
+    }
+
+    void stop() const {
+        ArduinoRuntime::getInstance().getPWM(pin).get().writePWM(0);
     }
 
 private:

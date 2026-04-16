@@ -29,6 +29,8 @@ add_executable(441Sim main.cpp
     ${PLANT_SRC}
     ${SIM_SRC}
     ${USER_SRC}
+        capability/ReadableDistance.h
+        config/TOFConfig.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

@@ -10,7 +10,10 @@
 
 #define PI M_PI
 
+#include <memory>
+
 #include "Handle.hpp"
+#include "../capability/ReadableDistance.h"
 #include "../capability/ReadableEncoder.h"
 #include "../capability/ReadableTime.h"
 #include "../capability/WriteablePWM.h"
@@ -29,8 +32,12 @@ public:
     void bindPWM(int pin, WriteablePWM& pwm);
     void bindEncoder(int pin, ReadableEncoder& encoder);
 
+    void bindTOF(ReadableDistance& tof);
+
     [[nodiscard]] Handle<WriteablePWM> getPWM(int pin) const;
     [[nodiscard]] Handle<ReadableEncoder> getEncoder(int pin) const;
+
+    [[nodiscard]] Handle<ReadableDistance> getTOF() const;
 
     [[nodiscard]] Handle<ReadableTime> getClock() const;
 
@@ -40,6 +47,8 @@ private:
 
     std::unordered_map<int, Handle<WriteablePWM>> pwmMap;
     std::unordered_map<int, Handle<ReadableEncoder>> encoderMap;
+
+    std::unique_ptr<Handle<ReadableDistance>> i2cTOF;
 
     Handle<ReadableTime> clock;
 };

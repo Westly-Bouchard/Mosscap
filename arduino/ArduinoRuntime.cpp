@@ -24,12 +24,20 @@ void ArduinoRuntime::bindEncoder(const int pin, ReadableEncoder &encoder) {
     encoderMap.emplace(pin, Handle{encoder});
 }
 
+void ArduinoRuntime::bindTOF(ReadableDistance &tof) {
+    i2cTOF = std::make_unique<Handle<ReadableDistance>>(tof);
+}
+
 Handle<WriteablePWM> ArduinoRuntime::getPWM(const int pin) const {
     return pwmMap.at(pin);
 }
 
 Handle<ReadableEncoder> ArduinoRuntime::getEncoder(const int pin) const {
     return encoderMap.at(pin);
+}
+
+Handle<ReadableDistance> ArduinoRuntime::getTOF() const {
+    return *i2cTOF;
 }
 
 Handle<ReadableTime> ArduinoRuntime::getClock() const {

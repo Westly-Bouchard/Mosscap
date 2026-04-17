@@ -10,23 +10,62 @@
 #include <optional>
 #include <ranges>
 
+/**
+ * A point in the plane
+ */
 struct Vec {
     double x, y;
 
+    /**
+     * Default ctor
+     */
     Vec() : x(0.0), y(0.0) {}
+
+    /**
+     * Ctor
+     * @param x x position of the point
+     * @param y y position of the point
+     */
     Vec(const double x, const double y) : x(x), y(y) {}
 };
 
+/**
+ * Abstract object class
+ * Represents an object that the sensor could detect
+ */
 struct Object {
+    /**
+     * Virtual dtor b/c polymorphism
+     */
     virtual ~Object() = default;
 
+    /**
+     * Test to see whether a ray representing the sensor's orientation intersects with this object
+     * @param o Position vector (position of sensor)
+     * @param d Direction vector (which way it's pointing)
+     * @return Nullopt if not detected, dist to object if detected
+     */
     [[nodiscard]] virtual std::optional<double> intersects(Vec o, Vec d) const = 0;
 };
 
+/**
+ * Line. This could be used on its own, but it's more likely to be used in a larger
+ * polygon that is made up of lines (triangle, rectangle, etc.)
+ */
 struct Line : Object {
+    // Start and end points of the line
     Vec a, b;
 
+    /**
+     * Default ctor
+     */
     Line() = default;
+
+    /**
+     * Ctor
+     * @param a Start point of line
+     * @param b End point of line
+     */
     Line(const Vec a, const Vec b) : a(a), b(b) {}
 
     [[nodiscard]] std::optional<double> intersects(const Vec o, const Vec d) const override {
@@ -44,9 +83,20 @@ struct Line : Object {
     }
 };
 
+/**
+ * A box (rectangle) that the sensor could detect
+ */
 struct Box : Object {
+    // Lines that make up the box, to be created in ctor
     std::array<Line, 4> lines;
 
+    /**
+     * Ctor
+     * @param w Width in meters
+     * @param h Height in meters
+     * @param pos Position from origin
+     * @param theta Angle from world x-axis
+     */
     Box(const double w, const double h, const Vec pos, const double theta) {
         // Construct lines
         std::array<Vec, 4> points{};
@@ -88,6 +138,12 @@ struct Box : Object {
     }
 
 protected:
+    /**
+     * Helper func to abstract functionality used by both the Box and BoundingBox
+     * @param o Origin vector
+     * @param d Direction vector
+     * @return Pair with number of intersections and distance
+     */
     [[nodiscard]] std::pair<int, double> checkLines(const Vec o, const Vec d) const {
         int numIntersections{0};
         double minDistance = std::numeric_limits<double>::max();

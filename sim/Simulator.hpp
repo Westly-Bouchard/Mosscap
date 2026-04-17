@@ -89,7 +89,7 @@ protected:
     std::unique_ptr<Plant<numStates, numInputs>> plant;
 
     /**
-     * Current state of the system, values are:
+     * Current state of the system, example values could be:
      * - x      | X position of the robot in the world frame
      * - y      | Y position of the robot in the world frame
      * - theta  | Orientation of the robot measured from world x

@@ -9,6 +9,7 @@
 #include <cmath>
 #include <optional>
 #include <ranges>
+#include <vector>
 
 /**
  * A point in the plane
@@ -165,7 +166,7 @@ protected:
  * rather than 0 (as if the sensor was pressed up against it)
  */
 struct BoundingBox : Box {
-    BoundingBox(const double w, const double h) : Box(w, h, Vec(), 0) {}
+    BoundingBox(const double w, const double h) : Box(w, h, {w / 2, h / 2}, 0) {}
 
     // This is a bit funky because if we have 0 intersections than the sensor is outside the
     // bounding box which is kind of a problem. I'm not going to worry about it for now
@@ -178,8 +179,20 @@ struct BoundingBox : Box {
     }
 };
 
+/**
+ * Configuration of a simulated TOF sensor. Contains:
+ * - A bounding box
+ * - A vector of objects that the sensor could detect
+ *
+ * Could potentially also contain a noise parameter to simulate
+ * non-ideal operation.
+ */
 struct TOFConfig {
+    const double x, y, theta;
+    BoundingBox boundingBox;
+    std::vector<Object> obstacles;
 
+    TOFConfig(const double x, const double y, const double theta) : x(x), y(y), theta(theta), boundingBox(0, 0) {}
 };
 
 #endif //INC_441SIM_TOFCONFIG_H

@@ -11,6 +11,7 @@
 #include "../config/MecanumConfig.h"
 #include "../hardware/SimMotor.h"
 #include "../hardware/SimEncoder.h"
+#include "../hardware/SimTOF.h"
 
 class MecanumSim : public Simulator<6, 4> {
 public:
@@ -63,6 +64,8 @@ public:
      */
     [[nodiscard]] SimEncoder& registerEncoder(unsigned int idx, std::unique_ptr<SimEncoder> encoder);
 
+    [[nodiscard]] SimTOF& registerTOF(std::unique_ptr<SimTOF> sensor);
+
 protected:
     /**
      * Update simulated hardware
@@ -87,6 +90,8 @@ private:
      */
     std::array<std::unique_ptr<SimMotor>, 4> motors;
     std::array<std::unique_ptr<SimEncoder>, 4> encoders;
+
+    std::unique_ptr<SimTOF> tof;
 
     /**
      * Get wheel velocities given current system state

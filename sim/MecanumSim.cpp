@@ -72,6 +72,11 @@ SimEncoder& MecanumSim::registerEncoder(const unsigned int idx, std::unique_ptr<
     return *encoders.at(idx);
 }
 
+SimTOF& MecanumSim::registerTOF(std::unique_ptr<SimTOF> sensor) {
+    tof = std::move(sensor);
+    return *tof;
+}
+
 // TODO: This entire structure / method of drawing is bad and should be rewritten
 #include "../graphics/drawHelpers.h"
 

@@ -3,10 +3,11 @@
 //
 
 #include <cmath>
+#include <utility>
 
 #include "SimTOF.h"
 
-SimTOF::SimTOF(const TOFConfig& config) : config(config) {}
+SimTOF::SimTOF(TOFConfig  config) : config(std::move(config)) {}
 
 double SimTOF::readDist() const {
     return dist.load();
@@ -34,7 +35,7 @@ void SimTOF::update(const double x, const double y, const double theta) {
 
     // Now check the list of obstacles to see if there's anything closer
     for (const auto& obj : config.obstacles) {
-        if (const auto res = obj.intersects(origin, direction)) {
+        if (const auto res = obj->intersects(origin, direction)) {
             tempDist = std::min(tempDist, *res);
         }
     }

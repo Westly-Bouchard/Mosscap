@@ -12,7 +12,7 @@
 
 class SimTOF final : public ReadableDistance {
 public:
-    explicit SimTOF(const TOFConfig& config);
+    explicit SimTOF(TOFConfig  config);
     /**
      * Get the current reading, this is called by the Arduino runtime
      * through a handle to this hardware's capability

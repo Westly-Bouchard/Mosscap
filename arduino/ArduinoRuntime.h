@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "Handle.hpp"
+#include "Wire.h"
 #include "../capability/ReadableDistance.h"
 #include "../capability/ReadableEncoder.h"
 #include "../capability/ReadableTime.h"
@@ -52,6 +53,13 @@ private:
 
     Handle<ReadableTime> clock;
 };
+
+/**
+ * For simulated I2C peripherals
+ * They just need a way to call `Wire.begin()` which, in this context,
+ * doesn't actually do anything.
+ */
+inline SimWire Wire;
 
 /**
  * Arduino time functions

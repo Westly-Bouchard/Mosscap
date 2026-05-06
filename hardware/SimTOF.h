@@ -37,6 +37,8 @@ public:
      */
     [[nodiscard]] double getDist() const;
 
+    void draw() const;
+
 private:
     const TOFConfig config;
 

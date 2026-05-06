@@ -17,8 +17,8 @@ namespace Helpers {
     /**
      * Space for drivable robots defaults to 1x1 meters
      */
-    static double pxPerMeter = 800.0;
-    static double scale = 1.0;
+    inline double pxPerMeter = 800.0;
+    inline double scale = 1.0;
 
     /**
      * Set up visualization window (for drawing robot state / position)

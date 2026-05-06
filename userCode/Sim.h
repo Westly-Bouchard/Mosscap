@@ -27,7 +27,7 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     TOFConfig tofConfig{0, 0, 0};
     tofConfig.boundingBox = BoundingBox(3, 3);
 
-    // tofConfig.obstacles.push_back(std::make_shared<Box>(1.0, 0.25, Vec{1.5, 2.0}, 0));
+    tofConfig.obstacles.push_back(std::make_shared<Box>(1.0, 0.25, Vec{1.5, 2.0}, 0));
 
     // Create robot
     auto robot = std::make_unique<MecanumSim>(config);

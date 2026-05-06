@@ -12,6 +12,8 @@
 #include <ranges>
 #include <vector>
 
+#include "../graphics/drawHelpers.h"
+
 /**
  * A point in the plane
  */
@@ -48,6 +50,8 @@ struct Object {
      * @return Nullopt if not detected, dist to object if detected
      */
     [[nodiscard]] virtual std::optional<double> intersects(Vec o, Vec d) const = 0;
+
+    virtual void draw() const = 0;
 };
 
 /**
@@ -86,12 +90,17 @@ struct Line : Object {
 
         return std::nullopt;
     }
+
+    void draw() const override {}
 };
 
 /**
  * A box (rectangle) that the sensor could detect
  */
 struct Box : Object {
+    double w, h, theta;
+    Vec pos;
+
     // Lines that make up the box, to be created in ctor
     std::array<Line, 4> lines;
 
@@ -102,7 +111,7 @@ struct Box : Object {
      * @param pos Position from origin
      * @param theta Angle from world x-axis
      */
-    Box(const double w, const double h, const Vec pos, const double theta) {
+    Box(const double w, const double h, const Vec pos, const double theta) : w(w), h(h), theta(theta), pos(pos) {
         // Construct lines
         std::array<Vec, 4> points{};
 
@@ -140,6 +149,10 @@ struct Box : Object {
 
         // If not then can return the minDistance
         return minDist;
+    }
+
+    void draw() const override {
+        Helpers::drawRect(pos.x, pos.y, theta, w, h, {255, 0, 0});
     }
 
 protected:

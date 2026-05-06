@@ -44,3 +44,9 @@ void SimTOF::update(const double x, const double y, const double theta) {
 
     dist.store(tempDist);
 }
+
+void SimTOF::draw() const {
+    for (const auto& obj : config.obstacles) {
+        obj->draw();
+    }
+}

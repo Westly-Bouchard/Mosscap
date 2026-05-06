@@ -114,6 +114,9 @@ void MecanumSim::draw() {
 
     ImGui::GetWindowDrawList()->AddPolyline(vertices.data(), vertices.size(), 0xFF00FF00, 0, 7.0);
 
+    // Draw tof objects
+    tof->draw();
+
     // Draw robot itself
     drawRect(state.at(0), state.at(1), state.at(2), 0.245, 0.200, {255, 255, 255});
 

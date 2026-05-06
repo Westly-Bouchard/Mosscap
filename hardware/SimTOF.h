@@ -39,7 +39,6 @@ public:
 
 private:
     const TOFConfig config;
-    // const MotorConfig config;
 
     std::atomic<double> dist;
 };

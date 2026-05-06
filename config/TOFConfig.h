@@ -16,12 +16,12 @@
  * A point in the plane
  */
 struct Vec {
-    double x, y;
+    double x{0.0}, y{0.0};
 
     /**
      * Default ctor
      */
-    Vec() : x(0.0), y(0.0) {}
+    Vec() = default;
 
     /**
      * Ctor
@@ -72,7 +72,10 @@ struct Line : Object {
 
     [[nodiscard]] std::optional<double> intersects(const Vec o, const Vec d) const override {
         const double v2v3 = (b.x - a.x) * (-d.y) + (b.y - a.y) * (d.x);
-        const double t1 = (b.x - a.x) * (o.y - a.y) - (b.y - a.y) * (o.x - a.x) / v2v3;
+
+        if (std::abs(v2v3) < 1e-8) { return std::nullopt; }
+
+        const double t1 = ((b.x - a.x) * (o.y - a.y) - (b.y - a.y) * (o.x - a.x)) / v2v3;
         const double t2 = ((o.x - a.x) * (-d.y) + (o.y - a.y) * (d.x)) / v2v3;
 
         if (t1 >= 0 && t2 >= 0 && t2 <= 1) {
@@ -190,8 +193,8 @@ struct BoundingBox : Box {
  */
 struct TOFConfig {
     const double x, y, theta;
-    // BoundingBox boundingBox;
-    // std::vector<std::unique_ptr<Object>> obstacles;
+    BoundingBox boundingBox;
+    std::vector<std::shared_ptr<Object>> obstacles{};
 
     TOFConfig(const double x, const double y, const double theta) : x(x), y(y), theta(theta), boundingBox(0, 0) {}
 };

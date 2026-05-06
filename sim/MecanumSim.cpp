@@ -133,6 +133,10 @@ void MecanumSim::draw() {
         }
     }
 
+    if (ImGui::CollapsingHeader("TOF", ImGuiTreeNodeFlags_DefaultOpen)) {
+        ImGui::Text("X\t: %4.2f", tof->getDist());
+    }
+
     const ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     ImGui::Separator();

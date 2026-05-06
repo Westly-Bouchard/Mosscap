@@ -27,11 +27,15 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     TOFConfig tofConfig{0, 0, 0};
     tofConfig.boundingBox = BoundingBox(3, 3);
 
+    // tofConfig.obstacles.push_back(std::make_shared<Box>(1.0, 0.25, Vec{1.5, 2.0}, 0));
+
     // Create robot
     auto robot = std::make_unique<MecanumSim>(config);
-    robot->setPose(2.5, 1.2, 90);
+    // robot->setPose(2.5, 1.2, 90);
+    robot->setPose(1.5, 1.5, 0);
 
     auto& tof = robot->registerTOF(std::make_unique<SimTOF>(tofConfig));
+    ArduinoRuntime::getInstance().bindTOF(tof);
 
     // Configuration of motors
     // In theory you could have a different config for each motor if you wanted

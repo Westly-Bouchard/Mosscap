@@ -5,7 +5,13 @@
 #include "Drivetrain.h"
 
 void setup() {
-    driveDistance(1.4);
+    delay(1000);
 }
 
-void loop() {}
+void loop() {
+    FL_M.run(-100);
+    BL_M.run(-100);
+
+    FR_M.run(100);
+    BR_M.run(100);
+}

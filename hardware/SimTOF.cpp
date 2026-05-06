@@ -25,20 +25,22 @@ void SimTOF::update(const double x, const double y, const double theta) {
 
     double tempDist = std::numeric_limits<double>::max();
 
-    const Vec origin{wX, wY}, direction{cos(wTheta), sin(wTheta)};
+    // TODO: Fix stupid coordinate system where 0 deg is along the y axis
+    // why did I do it this way
+    const Vec origin{wX, wY}, direction{sin(wTheta), cos(wTheta)};
 
     // Start with the bounding box check
     // Would be a big problem if this condition weren't true
-    // if (const auto res = config.boundingBox.intersects(origin, direction)) {
-    //     tempDist = *res;
-    // }
+    if (const auto res = config.boundingBox.intersects(origin, direction)) {
+        tempDist = *res;
+    }
 
     // Now check the list of obstacles to see if there's anything closer
-    // for (const auto& obj : config.obstacles) {
-    //     if (const auto res = obj->intersects(origin, direction)) {
-    //         tempDist = std::min(tempDist, *res);
-    //     }
-    // }
+    for (const auto& obj : config.obstacles) {
+        if (const auto res = obj->intersects(origin, direction)) {
+            tempDist = std::min(tempDist, *res);
+        }
+    }
 
     dist.store(tempDist);
 }

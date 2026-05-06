@@ -24,9 +24,14 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     // Configuration of the robot
     MecanumConfig config{Constants::CHASSIS_MASS, Constants::TRACKWIDTH, Constants::WHEELBASE, Constants::WHEEL_RADIUS};
 
+    TOFConfig tofConfig{0, 0, 0};
+    tofConfig.boundingBox = BoundingBox(3, 3);
+
     // Create robot
     auto robot = std::make_unique<MecanumSim>(config);
     robot->setPose(2.5, 1.2, 90);
+
+    auto& tof = robot->registerTOF(std::make_unique<SimTOF>(tofConfig));
 
     // Configuration of motors
     // In theory you could have a different config for each motor if you wanted

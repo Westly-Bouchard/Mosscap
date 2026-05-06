@@ -7,7 +7,7 @@
 
 #include "SimTOF.h"
 
-SimTOF::SimTOF(TOFConfig  config) : config(std::move(config)) {}
+SimTOF::SimTOF(const TOFConfig& c) : config(c) {}
 
 double SimTOF::readDist() const {
     return dist.load();
@@ -29,16 +29,16 @@ void SimTOF::update(const double x, const double y, const double theta) {
 
     // Start with the bounding box check
     // Would be a big problem if this condition weren't true
-    if (const auto res = config.boundingBox.intersects(origin, direction)) {
-        tempDist = *res;
-    }
+    // if (const auto res = config.boundingBox.intersects(origin, direction)) {
+    //     tempDist = *res;
+    // }
 
     // Now check the list of obstacles to see if there's anything closer
-    for (const auto& obj : config.obstacles) {
-        if (const auto res = obj->intersects(origin, direction)) {
-            tempDist = std::min(tempDist, *res);
-        }
-    }
+    // for (const auto& obj : config.obstacles) {
+    //     if (const auto res = obj->intersects(origin, direction)) {
+    //         tempDist = std::min(tempDist, *res);
+    //     }
+    // }
 
     dist.store(tempDist);
 }

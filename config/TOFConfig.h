@@ -190,8 +190,8 @@ struct BoundingBox : Box {
  */
 struct TOFConfig {
     const double x, y, theta;
-    BoundingBox boundingBox;
-    std::vector<std::unique_ptr<Object>> obstacles;
+    // BoundingBox boundingBox;
+    // std::vector<std::unique_ptr<Object>> obstacles;
 
     TOFConfig(const double x, const double y, const double theta) : x(x), y(y), theta(theta), boundingBox(0, 0) {}
 };

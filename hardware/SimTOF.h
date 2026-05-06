@@ -8,11 +8,12 @@
 #include <atomic>
 
 #include "../capability/ReadableDistance.h"
+#include "../config/MotorConfig.h"
 #include "../config/TOFConfig.h"
 
 class SimTOF final : public ReadableDistance {
 public:
-    explicit SimTOF(TOFConfig  config);
+    explicit SimTOF(const TOFConfig& c);
     /**
      * Get the current reading, this is called by the Arduino runtime
      * through a handle to this hardware's capability
@@ -38,6 +39,7 @@ public:
 
 private:
     const TOFConfig config;
+    // const MotorConfig config;
 
     std::atomic<double> dist;
 };

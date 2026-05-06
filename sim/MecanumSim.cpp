@@ -26,9 +26,13 @@ void MecanumSim::setPose(const double x, const double y, const double theta) {
 }
 
 void MecanumSim::updateHardware() {
+    // Update distance traveled by each wheel
     for (const auto vels = fwdKinematics(); auto&& [enc, vel] : views::zip((encoders), vels)) {
         enc->updatePosition(vel * dt);
     }
+
+    // Update tof position
+    tof->update(state.at(0), state.at(1), state.at(2));
 }
 
 void MecanumSim::setPlantInputs() {

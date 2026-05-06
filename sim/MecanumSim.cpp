@@ -26,9 +26,13 @@ void MecanumSim::setPose(const double x, const double y, const double theta) {
 }
 
 void MecanumSim::updateHardware() {
+    // Update distance traveled by each wheel
     for (const auto vels = fwdKinematics(); auto&& [enc, vel] : views::zip((encoders), vels)) {
         enc->updatePosition(vel * dt);
     }
+
+    // Update tof position
+    tof->update(state.at(0), state.at(1), state.at(2));
 }
 
 void MecanumSim::setPlantInputs() {
@@ -72,6 +76,11 @@ SimEncoder& MecanumSim::registerEncoder(const unsigned int idx, std::unique_ptr<
     return *encoders.at(idx);
 }
 
+SimTOF& MecanumSim::registerTOF(std::unique_ptr<SimTOF> sensor) {
+    tof = std::move(sensor);
+    return *tof;
+}
+
 // TODO: This entire structure / method of drawing is bad and should be rewritten
 #include "../graphics/drawHelpers.h"
 
@@ -105,6 +114,9 @@ void MecanumSim::draw() {
 
     ImGui::GetWindowDrawList()->AddPolyline(vertices.data(), vertices.size(), 0xFF00FF00, 0, 7.0);
 
+    // Draw tof objects
+    tof->draw();
+
     // Draw robot itself
     drawRect(state.at(0), state.at(1), state.at(2), 0.245, 0.200, {255, 255, 255});
 
@@ -122,6 +134,10 @@ void MecanumSim::draw() {
         for (auto&& [e, label] : std::views::zip(encoders, std::array{"FL", "FR", "BL", "BR"})) {
             ImGui::Text("%s counts: %i", label, e->readCount());
         }
+    }
+
+    if (ImGui::CollapsingHeader("TOF", ImGuiTreeNodeFlags_DefaultOpen)) {
+        ImGui::Text("X\t: %4.2f", tof->getDist());
     }
 
     const ImGuiIO& io = ImGui::GetIO(); (void)io;

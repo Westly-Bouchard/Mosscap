@@ -29,6 +29,10 @@ add_executable(441Sim main.cpp
     ${PLANT_SRC}
     ${SIM_SRC}
     ${USER_SRC}
+        capability/ReadableDistance.h
+        config/TOFConfig.h
+        arduino/VL53L0X.h
+        arduino/Wire.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

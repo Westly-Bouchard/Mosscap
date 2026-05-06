@@ -30,7 +30,7 @@ public:
     /**
      * This is inherited from the @link WriteablePWM @link Capability
      * It is used by the ArduinoRuntime to write values to the motor
-     * This function SHOULD never be called directly
+     * This function should never be called directly
      * @param value PWM Setpoint of the motor
      */
     void writePWM(int value) override;

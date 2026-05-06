@@ -27,7 +27,7 @@ void SimTOF::update(const double x, const double y, const double theta) {
 
     // TODO: Fix stupid coordinate system where 0 deg is along the y axis
     // why did I do it this way
-    const Vec origin{wX, wY}, direction{sin(wTheta), cos(wTheta)};
+    const Vec origin{wX, wY}, direction{cos(wTheta), sin(wTheta)};
 
     // Start with the bounding box check
     // Would be a big problem if this condition weren't true

@@ -51,18 +51,18 @@ std::array<double, 4> MecanumSim::fwdKinematics() const {
     const double c = cos(state.at(2));
     const double s = sin(state.at(2));
 
-    const double bVy = state.at(4) * c - state.at(3) * s;
-    const double bVx = state.at(3) * c + state.at(4) * s;
+    const double bVx = state.at(4) * c - state.at(3) * s;
+    const double bVy = state.at(3) * c + state.at(4) * s;
 
-    const double oOR = 1 / config.wheelRadius;
+    const double oOverR = 1 / config.wheelRadius;
     const double mid = config.wheelBase / 2 + config.trackWidth / 2;
     const double w = state.at(5);
 
     return {
-        oOR * (bVy - bVx - mid * w),
-        oOR * (bVy + bVx + mid * w),
-        oOR * (bVy + bVx - mid * w),
-        oOR * (bVy - bVx + mid * w)
+        oOverR * (bVy - bVx - mid * w),
+        oOverR * (bVy + bVx + mid * w),
+        oOverR * (bVy + bVx - mid * w),
+        oOverR * (bVy - bVx + mid * w)
     };
 }
 
@@ -118,7 +118,7 @@ void MecanumSim::draw() {
     tof->draw();
 
     // Draw robot itself
-    drawRect(state.at(0), state.at(1), state.at(2), 0.245, 0.200, {255, 255, 255});
+    drawRect(state.at(0), state.at(1), state.at(2), 0.200, 0.245, {255, 255, 255});
 
     endVizWindow();
 

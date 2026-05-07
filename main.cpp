@@ -49,7 +49,6 @@ int main() {
 
         newFrame();
 
-        // sim->draw();
         Renderer::getInstance().draw();
 
         ImGui::EndFrame();

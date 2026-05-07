@@ -28,6 +28,10 @@ public:
         return ArduinoRuntime::getInstance().getEncoder(index).get().readCount() - offset;
     }
 
+    /**
+     * Reads the count on the encoder and resets it to zero
+     * @return Current count
+     */
     [[nodiscard]] int readAndReset() {
         const int count = ArduinoRuntime::getInstance().getEncoder(index).get().readCount();
         const int ret = count - offset;
@@ -42,6 +46,7 @@ private:
      */
     int index;
 
+    // Used for the reset functionality
     int offset;
 
 };

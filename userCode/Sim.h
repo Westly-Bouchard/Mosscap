@@ -25,14 +25,19 @@ void drawPath();
  * @return Pointer to sim
  */
 inline std::unique_ptr<SimulatorBase> simInit() {
+    // Set rendering scale
     Renderer::setScale(3.0);
+
+    // Tells the renderer to draw the course (green lines) below the robot
     Renderer::getInstance().registerDrawFunction(-2, drawPath);
+
     // Configuration of the robot
     MecanumConfig config{Constants::CHASSIS_MASS, Constants::TRACKWIDTH, Constants::WHEELBASE, Constants::WHEEL_RADIUS};
 
     TOFConfig tofConfig{0, 0, 0};
     tofConfig.boundingBox = BoundingBox(3, 3);
 
+    // Add an obstacle for the sensor to detect
     tofConfig.obstacles.push_back(std::make_shared<Box>(1.0, 0.25, Vec{1.5, 2.0}, 0));
 
     // Create robot

@@ -19,7 +19,6 @@ public:
      * @param pinB Direction 2 pin
      * @param enable Enable pin (pwm)
      */
-    
     Motor(const int enable, const int pinA, const int pinB) : pin(pinA) {}
 
     /**
@@ -38,6 +37,9 @@ public:
         ArduinoRuntime::getInstance().getPWM(pin).get().writePWM(pwm);
     }
 
+    /**
+     * Stop the motor by writing pwm zero
+     */
     void stop() const {
         ArduinoRuntime::getInstance().getPWM(pin).get().writePWM(0);
     }

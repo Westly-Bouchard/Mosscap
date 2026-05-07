@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <cmath>
 
+// Redefine PI to match how Arduino defines it
 #define PI M_PI
 
 #include <memory>
@@ -19,38 +20,105 @@
 #include "../capability/ReadableTime.h"
 #include "../capability/WriteablePWM.h"
 
+/**
+ * Setup function from user code
+ */
 void setup();
 
+/**
+ * Loop function from user code
+ */
 void loop();
 
+/**
+ * This is the structure that the user code uses to interact with
+ * the simulator.
+ */
 class ArduinoRuntime {
 public:
+    /**
+     * Get singleton runtime instance
+     * @return Runtime instance
+     */
     static ArduinoRuntime& getInstance();
 
+    /**
+     * Deleted funcs because singleton
+     */
     ArduinoRuntime(const ArduinoRuntime&) = delete;
     ArduinoRuntime& operator=(const ArduinoRuntime&) = delete;
 
+    /**
+     * Make a certain pin PWM writeable by the user's code
+     * @param pin Pin to bind
+     * @param pwm Handle to capability
+     */
     void bindPWM(int pin, WriteablePWM& pwm);
+
+    /**
+     * Bind an encoder to the runtime
+     * Pin is the ID used to access and read the counts later
+     * @param pin Encoder A Pin
+     * @param encoder Readable encoder capability
+     */
     void bindEncoder(int pin, ReadableEncoder& encoder);
 
+    /**
+     * Bind a time of flight sensor to the runtime
+     * @param tof Readable distance capability
+     */
     void bindTOF(ReadableDistance& tof);
 
+    /**
+     * Get a handle to a writeable PWM to write a PWM to it
+     * @param pin Pin capability is bound to
+     * @return Handle to capability
+     */
     [[nodiscard]] Handle<WriteablePWM> getPWM(int pin) const;
+
+    /**
+     * Get a handle to an encoder to read its value
+     * @param pin Pin capability is bound to
+     * @return Handle to capability
+     */
     [[nodiscard]] Handle<ReadableEncoder> getEncoder(int pin) const;
 
+    /**
+     * Get a handle to the time of flight sensor to read its distance
+     * @return Handle to TOF capability
+     */
     [[nodiscard]] Handle<ReadableDistance> getTOF() const;
 
+    /**
+     * Get a handle to the simulator's clock to read the current time
+     * @return Handle to simulated clock
+     */
     [[nodiscard]] Handle<ReadableTime> getClock() const;
 
 private:
+    /**
+     * Private ctor and dtor because singleton
+     */
     ArduinoRuntime();
     ~ArduinoRuntime() = default;
 
+    /**
+     * Maps that store motors and encoders by their bound pins
+     */
     std::unordered_map<int, Handle<WriteablePWM>> pwmMap;
     std::unordered_map<int, Handle<ReadableEncoder>> encoderMap;
 
+    /**
+     * Right now the runtime only supports one TOF sensor, this could
+     * be changed in the future, though
+     */
     std::unique_ptr<Handle<ReadableDistance>> i2cTOF;
 
+    /**
+     * Handle to simulator's clock
+     * Not a unique pointer because this is created when the runtime
+     * is constructed.
+     */
     Handle<ReadableTime> clock;
 };
 
@@ -64,7 +132,6 @@ inline SimWire Wire;
 /**
  * Arduino time functions
  */
-
 int millis();
 
 int micros();
@@ -73,6 +140,9 @@ void delay(int ms);
 
 void delayMicroseconds(int us);
 
+/**
+ * Some of the Arduino standard functions
+ */
 template <typename T>
 T constrain(T in, T low, T high) {
     if (in < low) { return low; }

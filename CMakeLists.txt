@@ -33,6 +33,8 @@ add_executable(441Sim main.cpp
         config/TOFConfig.h
         arduino/VL53L0X.h
         arduino/Wire.h
+        graphics/Renderer.cpp
+        graphics/Renderer.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

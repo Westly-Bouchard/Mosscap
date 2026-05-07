@@ -10,6 +10,7 @@ using namespace std;
 #include <GLFW/glfw3.h>
 
 #include "graphics/graphics.h"
+#include "graphics/Renderer.h"
 #include "userCode/Sim.h"
 
 int main() {
@@ -48,7 +49,8 @@ int main() {
 
         newFrame();
 
-        sim->draw();
+        // sim->draw();
+        Renderer::getInstance().draw();
 
         ImGui::EndFrame();
 

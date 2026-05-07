@@ -81,69 +81,32 @@ SimTOF& MecanumSim::registerTOF(std::unique_ptr<SimTOF> sensor) {
     return *tof;
 }
 
-// TODO: This entire structure / method of drawing is bad and should be rewritten
-#include "../graphics/drawHelpers.h"
-
-using namespace Helpers;
-
-inline static constexpr std::array<std::pair<double, double>, 8> pathPoints = {{
-        {1.0, 0.3},
-        {-0.4, 0.3},
-        {-0.4, 1.2},
-        {-1.0, 1.2},
-        {-1.0, -0.6},
-        {0.0, -0.6},
-        {0.0, -1.2},
-        {1.0, -1.2}
-}};
-
-void MecanumSim::draw() {
-    setVizScale(3);
-    beginVizWindow();
-
-    // Draw path
-    std::array<ImVec2, pathPoints.size() + 1> vertices;
-    for (auto&& [p, v] : std::views::zip(pathPoints, vertices)) {
-        v.x = p.first * pxPerMeter + 400;
-        v.y = p.second * pxPerMeter + 400;
-    }
-
-    // This is kind of hacky but whatever
-    vertices.at(8) = vertices.at(0);
-    vertices.at(8).y += 3.1;
-
-    ImGui::GetWindowDrawList()->AddPolyline(vertices.data(), vertices.size(), 0xFF00FF00, 0, 7.0);
-
-    // Draw tof objects
-    tof->draw();
-
+void MecanumSim::draw() const {
     // Draw robot itself
     drawRect(state.at(0), state.at(1), state.at(2), 0.200, 0.245, {255, 255, 255});
 
-    endVizWindow();
-
-    beginTelemetryWindow();
+    // beginTelemetryWindow();
     // Write basic telemetry
-    if (ImGui::CollapsingHeader("Robot Position", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::Text("X\t: %4.2f", state.at(0));
-        ImGui::Text("Y\t: %4.2f", state.at(1));
-        ImGui::Text("theta: %4.2f", state.at(2) * 180.0 / M_PI);
-    }
-
-    if (ImGui::CollapsingHeader("Encoders", ImGuiTreeNodeFlags_DefaultOpen)) {
-        for (auto&& [e, label] : std::views::zip(encoders, std::array{"FL", "FR", "BL", "BR"})) {
-            ImGui::Text("%s counts: %i", label, e->readCount());
-        }
-    }
-
-    if (ImGui::CollapsingHeader("TOF", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::Text("X\t: %4.2f", tof->getDist());
-    }
-
-    const ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-    ImGui::Separator();
-    ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-
-    endTelemetryWindow();
+    // if (ImGui::CollapsingHeader("Robot Position", ImGuiTreeNodeFlags_DefaultOpen)) {
+    //     ImGui::Text("X\t: %4.2f", state.at(0));
+    //     ImGui::Text("Y\t: %4.2f", state.at(1));
+    //     ImGui::Text("theta: %4.2f", state.at(2) * 180.0 / M_PI);
+    // }
+    //
+    // if (ImGui::CollapsingHeader("Encoders", ImGuiTreeNodeFlags_DefaultOpen)) {
+    //     for (auto&& [e, label] : std::views::zip(encoders, std::array{"FL", "FR", "BL", "BR"})) {
+    //         ImGui::Text("%s counts: %i", label, e->readCount());
+    //     }
+    // }
+    //
+    // if (ImGui::CollapsingHeader("TOF", ImGuiTreeNodeFlags_DefaultOpen)) {
+    //     ImGui::Text("X\t: %4.2f", tof->getDist());
+    // }
+    //
+    // const ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //
+    // ImGui::Separator();
+    // ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    //
+    // endTelemetryWindow();
 }

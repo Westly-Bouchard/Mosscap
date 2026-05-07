@@ -12,7 +12,8 @@
 #include <ranges>
 #include <vector>
 
-#include "../graphics/drawHelpers.h"
+// #include "../graphics/drawHelpers.h"
+#include "../graphics/Renderer.h"
 
 /**
  * A point in the plane
@@ -37,11 +38,8 @@ struct Vec {
  * Abstract object class
  * Represents an object that the sensor could detect
  */
-struct Object {
-    /**
-     * Virtual dtor b/c polymorphism
-     */
-    virtual ~Object() = default;
+struct Object : Drawable {
+    Object() : Drawable(-1) {}
 
     /**
      * Test to see whether a ray representing the sensor's orientation intersects with this object
@@ -50,8 +48,6 @@ struct Object {
      * @return Nullopt if not detected, dist to object if detected
      */
     [[nodiscard]] virtual std::optional<double> intersects(Vec o, Vec d) const = 0;
-
-    virtual void draw() const = 0;
 };
 
 /**
@@ -152,7 +148,7 @@ struct Box : Object {
     }
 
     void draw() const override {
-        Helpers::drawRect(pos.x, pos.y, theta, w, h, {255, 0, 0});
+        drawRect(pos.x, pos.y, theta, w, h, {255, 0, 0});
     }
 
 protected:
@@ -194,6 +190,8 @@ struct BoundingBox : Box {
 
         return minDist;
     }
+
+    void draw() const override {}
 };
 
 /**

@@ -29,7 +29,7 @@ public:
     /**
      * Draw robot state + telemetry to ImGui window
      */
-    void draw() override;
+    void draw() const override;
 
     /**
      * Set the current position of the robot

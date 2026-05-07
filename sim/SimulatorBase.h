@@ -20,11 +20,6 @@ public:
     virtual void update(double& acc) = 0;
 
     /**
-     * Draw the simulator state to the current imgui window
-     */
-    virtual void draw() = 0;
-
-    /**
      * Get the clock associated with the simulator.
      * This is called by the ArduinoRuntime to obtain a time handle
      * which it uses to provide the current time to the user code

@@ -12,7 +12,11 @@
 #include "../hardware/SimEncoder.h"
 #include "../hardware/SimMotor.h"
 
+#include "../graphics/Renderer.h"
+
 #include "Constants.h"
+
+void drawPath();
 
 /**
  * Initialize the simulator
@@ -21,6 +25,8 @@
  * @return Pointer to sim
  */
 inline std::unique_ptr<SimulatorBase> simInit() {
+    Renderer::setScale(3.0);
+    Renderer::getInstance().registerDrawFunction(-2, drawPath);
     // Configuration of the robot
     MecanumConfig config{Constants::CHASSIS_MASS, Constants::TRACKWIDTH, Constants::WHEELBASE, Constants::WHEEL_RADIUS};
 
@@ -77,6 +83,31 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     ArduinoRuntime::getInstance().bindEncoder(18, BR_encoder);
 
     return robot;
+}
+
+void drawPath() {
+    static constexpr std::array<std::pair<double, double>, 8> pathPoints = {{
+        {1.0, 0.3},
+        {-0.4, 0.3},
+        {-0.4, 1.2},
+        {-1.0, 1.2},
+        {-1.0, -0.6},
+        {0.0, -0.6},
+        {0.0, -1.2},
+        {1.0, -1.2}
+    }};
+
+    std::array<ImVec2, pathPoints.size() + 1> vertices;
+    for (auto&& [p, v] : std::views::zip(pathPoints, vertices)) {
+        v.x = p.first * pxPerMeter + 400;
+        v.y = p.second * pxPerMeter + 400;
+    }
+
+    // This is kind of hacky but whatever
+    vertices.at(8) = vertices.at(0);
+    vertices.at(8).y += 3.1;
+
+    ImGui::GetWindowDrawList()->AddPolyline(vertices.data(), vertices.size(), 0xFF00FF00, 0, 7.0);
 }
 
 #endif //SIM_H

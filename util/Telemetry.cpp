@@ -40,7 +40,7 @@ void Telemetry::write() const {
 
     // Write to window from all providers
     for (const auto &p: providers | views::values) {
-        p->write();
+        p->update();
     }
 
     writing = false;

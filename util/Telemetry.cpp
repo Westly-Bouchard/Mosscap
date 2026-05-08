@@ -16,7 +16,7 @@ Telemetry& Telemetry::getInstance() {
     return instance;
 }
 
-void Telemetry::registerTelemetryProvider(const int priority, TelemetryProvider *provider) {
+void Telemetry::registerDataLink(const int priority, DataLink *provider) {
     providers.emplace_back(priority, provider);
 
     std::ranges::sort(providers, [](const auto& a, const auto& b) {
@@ -24,7 +24,7 @@ void Telemetry::registerTelemetryProvider(const int priority, TelemetryProvider 
     });
 }
 
-void Telemetry::unregisterTelemetryProvider(TelemetryProvider *provider) {
+void Telemetry::unregisterDataLink(DataLink *provider) {
     erase_if(providers, [provider](const auto& p) {
         return provider == p.second;
     });

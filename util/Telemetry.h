@@ -10,7 +10,7 @@
 #include <vector>
 
 // Forward declare
-class TelemetryProvider;
+class DataLink;
 
 /**
  * Singleton that manages all telemetry writing
@@ -44,14 +44,14 @@ public:
      * @param priority Priority of provider
      * @param provider Pointer to obj that implements TelemetryProvider
      */
-    void registerTelemetryProvider(int priority, TelemetryProvider* provider);
+    void registerDataLink(int priority, DataLink* provider);
 
     /**
      * This provides a method for a provider that goes out of scope to remove
      * itself from the list of providers.
      * @param provider Provider to remove
      */
-    void unregisterTelemetryProvider(TelemetryProvider* provider);
+    void unregisterDataLink(DataLink* provider);
 
     /**
      * This just wraps the ImgGui::CollapsingHeader function
@@ -81,7 +81,7 @@ private:
     /**
      * The vector of providers
      */
-    std::vector<std::pair<int, TelemetryProvider*>> providers;
+    std::vector<std::pair<int, DataLink*>> providers;
 
     /**
      * Guards against erroneous ImGui calls when not drawing a frame
@@ -93,28 +93,28 @@ private:
  * Interface for objects to implement that allows them to write telemetry
  * data to the ImGui telemetry window.
  */
-class TelemetryProvider {
+class DataLink {
 public:
     /**
      * Implementer must specify the priority
      * @param priority Priority of data
      */
-    explicit TelemetryProvider(const int priority) : p(priority) {
-        Telemetry::getInstance().registerTelemetryProvider(priority, this);
+    explicit DataLink(const int priority) : p(priority) {
+        Telemetry::getInstance().registerDataLink(priority, this);
     };
 
     /**
      * Copy constructor and copy assignment to ensure that copied Providers will
      * still be written even if the original provider goes out of scope.
      */
-    TelemetryProvider(const TelemetryProvider& other) : p(other.p){
-        Telemetry::getInstance().registerTelemetryProvider(other.p, this);
+    DataLink(const DataLink& other) : p(other.p){
+        Telemetry::getInstance().registerDataLink(other.p, this);
     }
 
-    TelemetryProvider &operator=(const TelemetryProvider& other) {
+    DataLink &operator=(const DataLink& other) {
         if (this != &other) {
             p = other.p;
-            Telemetry::getInstance().registerTelemetryProvider(other.p, this);
+            Telemetry::getInstance().registerDataLink(other.p, this);
         }
 
         return *this;
@@ -123,14 +123,28 @@ public:
     /**
      * Dtor unregisters the object from the telemetry system
      */
-    virtual ~TelemetryProvider() {
-        Telemetry::getInstance().unregisterTelemetryProvider(this);
+    virtual ~DataLink() {
+        Telemetry::getInstance().unregisterDataLink(this);
     }
 
     /**
      * Write function to be implemented by derived classes
      */
+    virtual void update() = 0;
+
+private:
+    int p;
+};
+
+class TelemetryProvider : public DataLink {
+public:
+    explicit TelemetryProvider(const int priority) : DataLink(priority) {}
+
     virtual void write() const = 0;
+
+    void update() override {
+        write();
+    }
 
 protected:
     /**
@@ -138,10 +152,10 @@ protected:
      * telemetry if desired. At the moment, properly synchronizing threads
      * is the responsibility of the implementer, this is not ideal.
      */
-    std::mutex telemMtx;
-
-private:
-    int p;
+    std::mutex linkMtx;
 };
+
+// Type alias for DataLink to signal that something accepts input semantically
+using InputAcceptor = DataLink;
 
 #endif //INC_441SIM_TELEMETRY_H

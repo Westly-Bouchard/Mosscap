@@ -75,7 +75,7 @@ private:
     /**
      * Private because singleton
      */
-    Telemetry();
+    Telemetry() = default;
     ~Telemetry() = default;
 
     /**
@@ -86,7 +86,7 @@ private:
     /**
      * Guards against erroneous ImGui calls when not drawing a frame
      */
-    static bool writing;
+    inline static bool writing = false;
 };
 
 /**

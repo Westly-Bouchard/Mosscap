@@ -5,6 +5,9 @@
 #include "Renderer.h"
 
 #include <algorithm>
+#include <array>
+#include <cmath>
+#include <ranges>
 
 using namespace std;
 
@@ -51,6 +54,8 @@ void Renderer::draw() const {
                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
                  ImGuiWindowFlags_NoResize);
 
+    drawing = true;
+
     // Draw all drawables and drawable functions to the window
     auto it = drawFunctions.begin();
 
@@ -68,7 +73,36 @@ void Renderer::draw() const {
         ++it;
     }
 
+    drawing = false;
+
     // End the visualization window
     ImGui::End();
     ImGui::PopStyleVar(2);
+}
+
+void Renderer::drawRect(const double x, const double y, const double theta, const double w,
+                         const double h, const ImColor color) {
+    if (!drawing) return;
+
+    std::array<ImVec2, 4> points;
+    const double c = cos(theta);
+    const double s = sin(theta);
+
+    // Center relative corner locations, before rotation
+    // Why does imgui use floats? So many casts...
+    const std::array<ImVec2, 4> vertices = {{
+        {static_cast<float>(-1.0 * w / 2.0), static_cast<float>(-1.0 * h / 2.0)},
+        {static_cast<float>(w / 2.0), static_cast<float>(-1.0 * h / 2.0)},
+        {static_cast<float>(w / 2.0), static_cast<float>(h / 2.0)},
+        {static_cast<float>(-1.0 * w / 2.0), static_cast<float>(h / 2.0)}
+    }};
+
+    // Rotate and translate each corner
+    for (auto&& [v, p] : std::views::zip(vertices, points)) {
+        p.x = static_cast<float>((x + (v.x * c - v.y * s)) * pxPerMeter);
+        p.y = static_cast<float>((scale - y - (v.x * s + v.y * c)) * pxPerMeter);
+    }
+
+    // Add to draw list
+    ImGui::GetWindowDrawList()->AddConvexPolyFilled(points.data(), 4, color);
 }

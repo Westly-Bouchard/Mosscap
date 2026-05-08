@@ -5,10 +5,8 @@
 #ifndef INC_441SIM_RENDERER_H
 #define INC_441SIM_RENDERER_H
 
-#include <array>
-#include <cmath>
+
 #include <functional>
-#include <ranges>
 #include <thread>
 #include <utility>
 #include <vector>
@@ -81,6 +79,18 @@ public:
      */
     void unregisterDrawable(Drawable* drawable);
 
+    /**
+     * Helper function to draw a rectangle to draw a rectangle to the
+     * visualization window.
+     * @param x X position of rect center
+     * @param y Y position of rect center
+     * @param theta Angle of rect from +x-axis
+     * @param w Width of rect
+     * @param h Height of rect
+     * @param color Color
+     */
+    static void drawRect(double x, double y, double theta, double w, double h, ImColor color);
+
 private:
     /**
      * Private because singleton
@@ -93,6 +103,11 @@ private:
      */
     std::vector<std::pair<int, Drawable*>> drawables;
     std::vector<std::pair<int, std::function<void()>>> drawFunctions;
+
+    /**
+     * Guards against erroneous ImGui calls when not drawing a frame
+     */
+    inline static bool drawing;
 };
 
 /**
@@ -141,43 +156,8 @@ public:
 
 protected:
     /**
-     * Helper function to draw a rectangle to draw a rectangle to the
-     * visualization window.
-     * @param x X position of rect center
-     * @param y Y position of rect center
-     * @param theta Angle of rect from +x-axis
-     * @param w Width of rect
-     * @param h Height of rect
-     * @param color Color
-     */
-    static void drawRect(const double x, const double y, const double theta, const double w,
-                         const double h, const ImColor color) {
-        std::array<ImVec2, 4> points;
-        const double c = cos(theta);
-        const double s = sin(theta);
-
-        // Center relative corner locations, before rotation
-        // Why does imgui use floats? So many casts...
-        const std::array<ImVec2, 4> vertices = {{
-            {static_cast<float>(-1.0 * w / 2.0), static_cast<float>(-1.0 * h / 2.0)},
-            {static_cast<float>(w / 2.0), static_cast<float>(-1.0 * h / 2.0)},
-            {static_cast<float>(w / 2.0), static_cast<float>(h / 2.0)},
-            {static_cast<float>(-1.0 * w / 2.0), static_cast<float>(h / 2.0)}
-        }};
-
-        // Rotate and translate each corner
-        for (auto&& [v, p] : std::views::zip(vertices, points)) {
-            p.x = static_cast<float>((x + (v.x * c - v.y * s)) * pxPerMeter);
-            p.y = static_cast<float>((scale - y - (v.x * s + v.y * c)) * pxPerMeter);
-        }
-
-        // Add to draw list
-        ImGui::GetWindowDrawList()->AddConvexPolyFilled(points.data(), 4, color);
-    }
-
-    /**
      * Included so that objects that run in the Arduino thread can be drawable
-     * Right now it's the responsibility of the inplementer to properly
+     * Right now it's the responsibility of the implementer to properly
      * synchronize threads when drawing, even though that's not ideal.
      */
     std::mutex drawMtx;

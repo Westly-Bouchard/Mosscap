@@ -148,7 +148,7 @@ struct Box : Object {
     }
 
     void draw() const override {
-        drawRect(pos.x, pos.y, theta, w, h, {255, 0, 0});
+        Renderer::drawRect(pos.x, pos.y, theta, w, h, {255, 0, 0});
     }
 
 protected:

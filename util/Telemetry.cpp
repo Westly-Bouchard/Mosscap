@@ -16,10 +16,6 @@ Telemetry& Telemetry::getInstance() {
     return instance;
 }
 
-Telemetry::Telemetry() {
-    writing = false;
-}
-
 void Telemetry::registerTelemetryProvider(const int priority, TelemetryProvider *provider) {
     providers.emplace_back(priority, provider);
 

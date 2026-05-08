@@ -83,7 +83,7 @@ SimTOF& MecanumSim::registerTOF(std::unique_ptr<SimTOF> sensor) {
 
 void MecanumSim::draw() const {
     // Draw robot itself
-    drawRect(state.at(0), state.at(1), state.at(2), 0.200, 0.245, {255, 255, 255});
+    Renderer::drawRect(state.at(0), state.at(1), state.at(2), 0.200, 0.245, {255, 255, 255});
 
     // beginTelemetryWindow();
     // Write basic telemetry

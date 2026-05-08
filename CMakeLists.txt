@@ -37,6 +37,9 @@ add_executable(441Sim main.cpp
         util/Renderer.h
         util/Telemetry.cpp
         util/Telemetry.h
+        capability/DigitallyReadable.h
+        hardware/SimButton.cpp
+        hardware/SimButton.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

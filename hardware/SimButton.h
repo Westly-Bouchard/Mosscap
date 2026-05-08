@@ -1,43 +1,27 @@
 //
-// Created by Westly Bouchard on 3/2/26.
+// Created by west on 5/7/26.
 //
 
-#ifndef SIMBUTTON_H
-#define SIMBUTTON_H
+#ifndef INC_441SIM_SIMBUTTON_H
+#define INC_441SIM_SIMBUTTON_H
 
 #include <atomic>
 
-#include "../capability/ReadableButton.h"
+#include "../capability/DigitallyReadable.h"
+#include "../util/Telemetry.h"
 
-/**
- * Simulated button
- */
-class SimButton final : public ReadableButton {
+class SimButton : public DigitallyReadable, public InputAcceptor {
 public:
-    /**
-     * Default ctor
-     */
-    SimButton() = default;
+    explicit SimButton(const std::string &name);
 
-    /**
-     * Get current state of button
-     * Overridden from @link ReadableButton
-     * @return State of button
-     */
     [[nodiscard]] bool digitalRead() const override;
 
-    /**
-     * Set the current state of the hardware
-     * This is called by the @link Simulator NOT by user code
-     * @param s pressed or unpressed
-     */
-    void setState(bool s);
+    void update() override;
 
 private:
-    /**
-     * Current state of the hardware
-     */
+    std::string name;
+
     std::atomic_bool state{false};
 };
 
-#endif //SIMBUTTON_H
+#endif //INC_441SIM_SIMBUTTON_H

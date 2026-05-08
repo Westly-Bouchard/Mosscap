@@ -27,7 +27,7 @@ public:
     explicit MecanumSim(const MecanumConfig &config);
 
     /**
-     * Draw robot state + telemetry to ImGui window
+     * Draw robot state to ImGui window
      */
     void draw() const override;
 
@@ -45,31 +45,11 @@ public:
      */
     void setPose(double x, double y, double theta);
 
-    /**
-     * Register a motor with the simulator
-     * Returned value should be used to wire hardware with the @link ArduinoRuntime
-     *
-     * TODO: ArduinoRuntime wiring can be done within this function
-     *
-     * @param idx Index into motors array
-     * @param motor Motor to register
-     * @return Reference to registered motor
-     */
-    [[nodiscard]] SimMotor& registerMotor(unsigned int idx, std::unique_ptr<SimMotor> motor);
+    void registerMotor(unsigned int idx, MotorConfig c, int pin);
 
-    /**
-     * Register an encoder with the simulator
-     * Returned value should be used to wire hardware with the @link ArduinoRuntime
-     *
-     * TODO: ArduinoRuntime wiring can be done within this function
-     *
-     * @param idx Index into the encoders array
-     * @param encoder Encoder to register
-     * @return Reference to registered encoder
-     */
-    [[nodiscard]] SimEncoder& registerEncoder(unsigned int idx, std::unique_ptr<SimEncoder> encoder);
+    void registerEncoder(unsigned int idx, int cpr, int pin);
 
-    [[nodiscard]] SimTOF& registerTOF(std::unique_ptr<SimTOF> sensor);
+    void registerTOF(TOFConfig c);
 
 protected:
     /**

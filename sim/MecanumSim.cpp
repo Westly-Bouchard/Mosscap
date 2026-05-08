@@ -67,19 +67,19 @@ std::array<double, 4> MecanumSim::fwdKinematics() const {
     };
 }
 
-SimMotor& MecanumSim::registerMotor(const unsigned int idx, std::unique_ptr<SimMotor> motor) {
-    motors.at(idx) = std::move(motor);
-    return *motors.at(idx);
+void MecanumSim::registerMotor(const unsigned int idx, MotorConfig c, const int pin) {
+    motors.at(idx) = std::make_unique<SimMotor>(c);
+    ArduinoRuntime::getInstance().bindPWM(pin, *motors.at(idx));
 }
 
-SimEncoder& MecanumSim::registerEncoder(const unsigned int idx, std::unique_ptr<SimEncoder> encoder) {
-    encoders.at(idx) = std::move(encoder);
-    return *encoders.at(idx);
+void MecanumSim::registerEncoder(const unsigned int idx, const int cpr, const int pin) {
+    encoders.at(idx) = std::make_unique<SimEncoder>(cpr);
+    ArduinoRuntime::getInstance().bindEncoder(pin, *encoders.at(idx));
 }
 
-SimTOF& MecanumSim::registerTOF(std::unique_ptr<SimTOF> sensor) {
-    tof = std::move(sensor);
-    return *tof;
+void MecanumSim::registerTOF(TOFConfig c) {
+    tof = std::make_unique<SimTOF>(c);
+    ArduinoRuntime::getInstance().bindTOF(*tof);
 }
 
 void MecanumSim::draw() const {

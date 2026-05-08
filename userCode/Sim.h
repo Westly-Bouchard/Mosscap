@@ -34,58 +34,33 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     // Configuration of the robot
     MecanumConfig config{Constants::CHASSIS_MASS, Constants::TRACKWIDTH, Constants::WHEELBASE, Constants::WHEEL_RADIUS};
 
+    // Create robot
+    auto robot = std::make_unique<MecanumSim>(config);
+    // robot->setPose(2.5, 1.2, 90);
+    robot->setPose(1.5, 1.5, 0);
+
     TOFConfig tofConfig{0, 0, 0};
     tofConfig.boundingBox = BoundingBox(3, 3);
 
     // Add an obstacle for the sensor to detect
     tofConfig.obstacles.push_back(std::make_shared<Box>(1.0, 0.25, Vec{1.5, 2.0}, 0));
 
-    // Create robot
-    auto robot = std::make_unique<MecanumSim>(config);
-    // robot->setPose(2.5, 1.2, 90);
-    robot->setPose(1.5, 1.5, 0);
-
-    auto& tof = robot->registerTOF(std::make_unique<SimTOF>(tofConfig));
-    ArduinoRuntime::getInstance().bindTOF(tof);
+    robot->registerTOF(tofConfig);
 
     // Configuration of motors
     // In theory you could have a different config for each motor if you wanted
     // But in this case each motor is exactly the same
-    MotorConfig mConfig{Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS};
+    const MotorConfig mConfig{Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS};
 
-    // Create motors and register them with the ArduinoRuntime
-    auto& FL = robot->registerMotor(MecanumSim::FL, std::make_unique<SimMotor>(MotorConfig(
-        Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS, 0.239
-    )));
-    ArduinoRuntime::getInstance().bindPWM(28, FL);
+    robot->registerMotor(MecanumSim::FL, mConfig, 28);
+    robot->registerMotor(MecanumSim::FR, mConfig, 24);
+    robot->registerMotor(MecanumSim::BL, mConfig, 4);
+    robot->registerMotor(MecanumSim::BR, mConfig, 7);
 
-    auto& FR = robot->registerMotor(MecanumSim::FR, std::make_unique<SimMotor>(MotorConfig(
-        Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS, 0.239
-    )));
-    ArduinoRuntime::getInstance().bindPWM(24, FR);
-
-    auto& BL = robot->registerMotor(MecanumSim::BL, std::make_unique<SimMotor>(MotorConfig(
-        Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS, 0.239
-    )));
-    ArduinoRuntime::getInstance().bindPWM(4, BL);
-
-    auto& BR = robot->registerMotor(MecanumSim::BR, std::make_unique<SimMotor>(MotorConfig(
-        Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS, 0.239
-    )));
-    ArduinoRuntime::getInstance().bindPWM(7, BR);
-
-    // Create encoders and register them with the ArduinoRuntime
-    SimEncoder& FL_encoder = robot->registerEncoder(MecanumSim::FL, std::make_unique<SimEncoder>(1500));
-    ArduinoRuntime::getInstance().bindEncoder(3, FL_encoder);
-
-    SimEncoder& FR_encoder = robot->registerEncoder(MecanumSim::FR, std::make_unique<SimEncoder>(1500));
-    ArduinoRuntime::getInstance().bindEncoder(2, FR_encoder);
-
-    SimEncoder& BL_encoder = robot->registerEncoder(MecanumSim::BL, std::make_unique<SimEncoder>(1500));
-    ArduinoRuntime::getInstance().bindEncoder(19, BL_encoder);
-
-    SimEncoder& BR_encoder = robot->registerEncoder(MecanumSim::BR, std::make_unique<SimEncoder>(1500));
-    ArduinoRuntime::getInstance().bindEncoder(18, BR_encoder);
+    robot->registerEncoder(MecanumSim::FL, 1500, 3);
+    robot->registerEncoder(MecanumSim::FR, 1500, 2);
+    robot->registerEncoder(MecanumSim::BL, 1500, 19);
+    robot->registerEncoder(MecanumSim::BR, 1500, 18);
 
     ArduinoRuntime::getInstance().createButton("Test", 1);
 

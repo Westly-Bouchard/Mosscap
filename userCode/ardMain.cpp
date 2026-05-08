@@ -5,7 +5,7 @@
 #include "Drivetrain.h"
 
 void setup() {
-    delay(1000);
+    // delay(1000);
 }
 
 void loop() {

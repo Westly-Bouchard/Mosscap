@@ -32,7 +32,7 @@ void Renderer::registerDrawFunction(const int layer, const function<void()>& fun
 }
 
 void Renderer::unregisterDrawable(Drawable* drawable) {
-    erase_if(drawables, [drawable](auto d) { return drawable == d.second; });
+    erase_if(drawables, [drawable](const auto& d) { return drawable == d.second; });
 }
 
 void Renderer::setScale(const double meters) {

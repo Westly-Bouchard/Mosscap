@@ -13,7 +13,7 @@
 #include <vector>
 
 // #include "../graphics/drawHelpers.h"
-#include "../graphics/Renderer.h"
+#include "../util/Renderer.h"
 
 /**
  * A point in the plane

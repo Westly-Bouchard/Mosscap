@@ -9,6 +9,7 @@
 #include <cmath>
 #include <functional>
 #include <ranges>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -119,6 +120,7 @@ public:
 
     Drawable& operator=(const Drawable& other) {
         if (this != &other) {
+            l = other.l;
             Renderer::getInstance().registerDrawable(other.l, this);
         }
 
@@ -172,6 +174,13 @@ protected:
         // Add to draw list
         ImGui::GetWindowDrawList()->AddConvexPolyFilled(points.data(), 4, color);
     }
+
+    /**
+     * Included so that objects that run in the Arduino thread can be drawable
+     * Right now it's the responsibility of the inplementer to properly
+     * synchronize threads when drawing, even though that's not ideal.
+     */
+    std::mutex drawMtx;
 
 private:
     int l;

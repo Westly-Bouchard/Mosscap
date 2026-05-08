@@ -16,7 +16,7 @@
 // Project Includes
 #include "../arduino/ArduinoRuntime.h"
 #include "SimulatorBase.h"
-#include "../graphics/Renderer.h"
+#include "../util/Renderer.h"
 #include "../plant/Plant.hpp"
 #include "../hardware/SimClock.h"
 

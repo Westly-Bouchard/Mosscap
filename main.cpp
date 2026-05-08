@@ -9,8 +9,8 @@ using namespace std;
 #endif
 #include <GLFW/glfw3.h>
 
-#include "graphics/graphics.h"
-#include "graphics/Renderer.h"
+#include "util/graphics.h"
+#include "util/Renderer.h"
 #include "userCode/Sim.h"
 
 int main() {

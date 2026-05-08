@@ -14,7 +14,7 @@ add_subdirectory(external)
 aux_source_directory(arduino ARDUINO_RUNTIME_SRC)
 aux_source_directory(capability CAPABILITIES_SRC)
 aux_source_directory(config CONFIG_SRC)
-aux_source_directory(graphics GRAPHICS_SRC)
+aux_source_directory(util GRAPHICS_SRC)
 aux_source_directory(hardware HARDWARE_SRC)
 aux_source_directory(plant PLANT_SRC)
 aux_source_directory(sim SIM_SRC)
@@ -33,8 +33,10 @@ add_executable(441Sim main.cpp
         config/TOFConfig.h
         arduino/VL53L0X.h
         arduino/Wire.h
-        graphics/Renderer.cpp
-        graphics/Renderer.h
+        util/Renderer.cpp
+        util/Renderer.h
+        util/Telemetry.cpp
+        util/Telemetry.h
 )
 
 target_include_directories(441Sim PRIVATE ${Boost_INCLUDE_DIRS})

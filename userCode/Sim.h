@@ -12,7 +12,7 @@
 #include "../hardware/SimEncoder.h"
 #include "../hardware/SimMotor.h"
 
-#include "../graphics/Renderer.h"
+#include "../util/Renderer.h"
 
 #include "Constants.h"
 

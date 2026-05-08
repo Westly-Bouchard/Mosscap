@@ -25,7 +25,6 @@ void SimTOF::update(const double x, const double y, const double theta) {
 
     double tempDist = std::numeric_limits<double>::max();
 
-    // TODO: Fix stupid coordinate system where 0 deg is along the y axis
     // why did I do it this way
     const Vec origin{wX, wY}, direction{cos(wTheta), sin(wTheta)};
 

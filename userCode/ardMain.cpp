@@ -5,13 +5,8 @@
 #include "Drivetrain.h"
 
 void setup() {
-    delay(500);
+    pinMode(1, INPUT_PULLUP);
 }
 
 void loop() {
-    FL_M.run(-100);
-    BL_M.run(-100);
-
-    FR_M.run(100);
-    BR_M.run(100);
 }

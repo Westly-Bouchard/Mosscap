@@ -87,6 +87,8 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     SimEncoder& BR_encoder = robot->registerEncoder(MecanumSim::BR, std::make_unique<SimEncoder>(1500));
     ArduinoRuntime::getInstance().bindEncoder(18, BR_encoder);
 
+    ArduinoRuntime::getInstance().createButton("Test", 1);
+
     return robot;
 }
 

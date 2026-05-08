@@ -8,6 +8,7 @@
 #include <thread>
 
 #include "../sim/SimulatorBase.h"
+#include "../hardware/SimButton.h"
 
 ArduinoRuntime::ArduinoRuntime() : clock(SimulatorBase::getClock()) {}
 
@@ -28,6 +29,21 @@ void ArduinoRuntime::bindTOF(ReadableDistance &tof) {
     i2cTOF = std::make_unique<Handle<ReadableDistance>>(tof);
 }
 
+void ArduinoRuntime::createButton(const std::string& name, int pin) {
+    // Default to regular input, if user uses pinMode later with INPUT_PULLUP
+    // it will modify the pair.second here to signal that to the runtime
+    digitalInputs.emplace(pin, std::make_pair(std::make_unique<SimButton>(name), false));
+}
+
+void ArduinoRuntime::setInputPullup(const int pin) {
+    digitalInputs.at(pin).second = INPUT_PULLUP;
+}
+
+bool ArduinoRuntime::getDigitalInputState(const int pin) const {
+    auto& [device, pullup] = digitalInputs.at(pin);
+    return !device->digitalRead() != !pullup;
+}
+
 Handle<WriteablePWM> ArduinoRuntime::getPWM(const int pin) const {
     return pwmMap.at(pin);
 }
@@ -42,6 +58,16 @@ Handle<ReadableDistance> ArduinoRuntime::getTOF() const {
 
 Handle<ReadableTime> ArduinoRuntime::getClock() const {
     return clock;
+}
+
+void pinMode(const int pin, const int mode) {
+    if (mode == INPUT_PULLUP) {
+        ArduinoRuntime::getInstance().setInputPullup(pin);
+    }
+}
+
+bool digitalRead(const int pin) {
+    return ArduinoRuntime::getInstance().getDigitalInputState(pin);
 }
 
 /**

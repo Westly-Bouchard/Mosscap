@@ -4,6 +4,8 @@
 
 #include "SimButton.h"
 
+#include <iostream>
+
 #include "imgui.h"
 
 SimButton::SimButton(const std::string &name) : InputAcceptor(-1), name(name) {}
@@ -13,7 +15,8 @@ bool SimButton::digitalRead() const {
 }
 
 void SimButton::update() {
-    if (ImGui::Button(name.c_str())) {
+    ImGui::Button(name.c_str());
+    if (ImGui::IsItemActive()) {
         state.store(true);
     } else {
         state.store(false);

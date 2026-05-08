@@ -15,6 +15,7 @@
 
 #include "Handle.hpp"
 #include "Wire.h"
+#include "../capability/DigitallyReadable.h"
 #include "../capability/ReadableDistance.h"
 #include "../capability/ReadableEncoder.h"
 #include "../capability/ReadableTime.h"
@@ -69,6 +70,12 @@ public:
      */
     void bindTOF(ReadableDistance& tof);
 
+    void createButton(const std::string& name, int pin);
+
+    void setInputPullup(int pin);
+
+    bool getDigitalInputState(int pin) const;
+
     /**
      * Get a handle to a writeable PWM to write a PWM to it
      * @param pin Pin capability is bound to
@@ -120,6 +127,8 @@ private:
      * is constructed.
      */
     Handle<ReadableTime> clock;
+
+    std::unordered_map<int, std::pair<std::unique_ptr<DigitallyReadable>, bool>> digitalInputs;
 };
 
 /**
@@ -128,6 +137,16 @@ private:
  * doesn't actually do anything.
  */
 inline SimWire Wire;
+
+/**
+ * Arduino digital input and output functions
+ */
+#define INPUT 0
+#define INPUT_PULLUP 1
+// #define OUTPUT 2
+void pinMode(int pin, int mode);
+
+bool digitalRead(int pin);
 
 /**
  * Arduino time functions

@@ -98,8 +98,12 @@ void MecanumSim::write() const {
         ss << "Y\t: " << state.at(1);
         Telemetry::text(ss.str());
 
+        double t = state.at(2);
+
+        while (t > 2 * M_PI) t -= 2 * M_PI;
+
         ss.str("");
-        ss << "Theta\t: " << state.at(2) * 180.0 / M_PI;
+        ss << "Theta\t: " << t * 180.0 / M_PI;
         Telemetry::text(ss.str());
     }
 

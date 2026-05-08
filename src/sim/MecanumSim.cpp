@@ -8,7 +8,7 @@
 #include <ranges>
 #include <sstream>
 
-#include "../plant/MecanumPlant.h"
+#include "plant/MecanumPlant.h"
 
 using namespace std;
 

@@ -7,8 +7,8 @@
 #include <chrono>
 #include <thread>
 
-#include "../sim/SimulatorBase.h"
-#include "../hardware/SimButton.h"
+#include "sim/SimulatorBase.h"
+#include "hardware/SimButton.h"
 
 ArduinoRuntime::ArduinoRuntime() : clock(SimulatorBase::getClock()) {}
 

@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <ranges>
+#include <sstream>
 
 #include "../plant/MecanumPlant.h"
 
@@ -82,31 +83,40 @@ SimTOF& MecanumSim::registerTOF(std::unique_ptr<SimTOF> sensor) {
 }
 
 void MecanumSim::draw() const {
-    // Draw robot itself
+    // Draw robot
     Renderer::drawRect(state.at(0), state.at(1), state.at(2), 0.200, 0.245, {255, 255, 255});
+}
 
-    // beginTelemetryWindow();
-    // Write basic telemetry
-    // if (ImGui::CollapsingHeader("Robot Position", ImGuiTreeNodeFlags_DefaultOpen)) {
-    //     ImGui::Text("X\t: %4.2f", state.at(0));
-    //     ImGui::Text("Y\t: %4.2f", state.at(1));
-    //     ImGui::Text("theta: %4.2f", state.at(2) * 180.0 / M_PI);
-    // }
-    //
-    // if (ImGui::CollapsingHeader("Encoders", ImGuiTreeNodeFlags_DefaultOpen)) {
-    //     for (auto&& [e, label] : std::views::zip(encoders, std::array{"FL", "FR", "BL", "BR"})) {
-    //         ImGui::Text("%s counts: %i", label, e->readCount());
-    //     }
-    // }
-    //
-    // if (ImGui::CollapsingHeader("TOF", ImGuiTreeNodeFlags_DefaultOpen)) {
-    //     ImGui::Text("X\t: %4.2f", tof->getDist());
-    // }
-    //
-    // const ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //
-    // ImGui::Separator();
-    // ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-    //
-    // endTelemetryWindow();
+void MecanumSim::write() const {
+    stringstream ss;
+
+    if (Telemetry::section("Robot Position")) {
+        ss << "X\t: " << state.at(0);
+        Telemetry::text(ss.str());
+
+        ss.str("");
+        ss << "Y\t: " << state.at(1);
+        Telemetry::text(ss.str());
+
+        ss.str("");
+        ss << "Theta\t: " << state.at(2) * 180.0 / M_PI;
+        Telemetry::text(ss.str());
+    }
+
+    ss.str("");
+
+    if (Telemetry::section("Encoders")) {
+        for (auto&& [e, label] : std::views::zip(encoders, std::array{"FL", "FR", "BL", "BR"})) {
+            ss << label << " counts: " << e->readCount();
+            Telemetry::text(ss.str());
+            ss.str("");
+        }
+    }
+
+    ss.str("");
+
+    if (Telemetry::section("TOF")) {
+        ss << "Current reading: " << tof->getDist();
+        Telemetry::text(ss.str());
+    }
 }

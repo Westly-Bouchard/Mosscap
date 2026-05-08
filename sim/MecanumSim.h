@@ -32,6 +32,11 @@ public:
     void draw() const override;
 
     /**
+     * Write telemetry data to ImGui window
+     */
+    void write() const override;
+
+    /**
      * Set the current position of the robot
      * Primarily used in simulator setup to set the initial pose
      * @param x meters

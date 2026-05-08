@@ -51,6 +51,8 @@ int main() {
 
         Renderer::getInstance().draw();
 
+        Telemetry::getInstance().write();
+
         ImGui::EndFrame();
 
         render(window);

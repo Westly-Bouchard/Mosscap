@@ -33,9 +33,9 @@ public:
 
     /**
      * Construct simulator, calls Arduino `setup()` function
-     * @param timestep Simulation timestep, default is 0.002 (500Hz)
+     * @param timestep Simulation timestep, default is 0.001 (1000Hz)
      */
-    explicit Simulator(const double timestep=0.002) : Drawable(0), TelemetryProvider(0), dt(timestep), simTime(0.0) {}
+    explicit Simulator(const double timestep=0.001) : Drawable(0), TelemetryProvider(0), dt(timestep), simTime(0.0) {}
 
     ~Simulator() override {
         // Stop user code thread and join
@@ -120,9 +120,26 @@ private:
         // Call setup function
         setup();
 
+        auto lastTime = std::chrono::high_resolution_clock::now();
+
         while (arduinoThreadRunning) {
             // Call loop
             loop();
+
+            // Sleep for a little bit so that we don't
+            // pin a core at 100% usage at all times.
+            // Will use 500Hz for now because physics runs at 1kHz
+            auto now = std::chrono::high_resolution_clock::now();
+            double remainingTime = (1.0 / 500) - std::chrono::duration<double>(now - lastTime).count();
+            lastTime = now;
+
+            // If that loop call took less than 1 500th of a second, sleep the thread until it's time
+            // for the next call to loop.
+            // If the user code blocks in loop or sleeps the thread, that's fine, we just want to limit
+            // the upper bound for the frequency at which this thread will run
+            if (remainingTime > 0) {
+                std::this_thread::sleep_for(std::chrono::duration<double>(remainingTime));
+            }
         }
     }
 

@@ -63,5 +63,5 @@ bool Telemetry::section(const string& name) {
 void Telemetry::text(const string& text) {
     if (!writing) return;
 
-    ImGui::Text(text.c_str());
+    ImGui::Text("%s", text.c_str());
 }

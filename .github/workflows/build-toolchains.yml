@@ -76,5 +76,5 @@ jobs:
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
               with:
-                name: emsdk-${{ runner.os }}
-                path: emsdk-${{ runner.os }}.zip
+                name: emsdk-${{ matrix.artifact_name }}
+                path: emsdk-${{ matrix.artifact_name }}.zip

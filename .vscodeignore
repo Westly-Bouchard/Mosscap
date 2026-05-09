@@ -9,3 +9,6 @@ src/**
 tsconfig.json
 
 !sim-core/**
+
+# emsdk cahce is generated during packaging and is huge, don't include it
+emsdk-cache/**

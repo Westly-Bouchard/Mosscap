@@ -1,0 +1,45 @@
+name: Build C++ Simulator and Package Extension
+
+on:
+    push:
+        branches: [ "main" ]
+    workflow_dispatch:
+
+jobs:
+    build:
+        name: Build Simulator Core and Package VSIX
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                submodules: true # Also pull ImGui
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                node-version: '20'
+
+            - name: Setup Emscripten
+              uses: mymindstorm/setup-emsdk@v14
+              with:
+                version: latest
+                actions-cache-folder: 'emsdk-cache'
+
+            - name: Install NPM Dependencies
+              run: npm ci
+
+            - name: Build C++ Simulator Core
+              run: npm run build-sim
+
+            - name: Package VSCode Extension
+              run: npx vsce package --out mosscap.vsix
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: mosscap-extension
+                  path: mosscap.vsix
+                  retention-days: 7

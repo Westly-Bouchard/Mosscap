@@ -25,7 +25,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "build-sim": "bash build-core.sh"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.8",

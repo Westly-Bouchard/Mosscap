@@ -5,4 +5,11 @@ cmake-build-debug
 cmake-build-debug-emscripten
 build
 
-node_modules
+node_modules/
+out/
+dist/
+
+sim/build
+
+sim-core
+sim-core-old

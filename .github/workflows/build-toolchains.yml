@@ -67,11 +67,11 @@ jobs:
 
             - name: Zip toolchain (unix)
               if: runner.os != 'Windows'
-              run: zip -r emsdk-${{ runner.os }}.zip emsdk/
+              run: zip -r emsdk-${{ matrix.artifact_name }}.zip emsdk/
               
             - name: Zip toolchain (win)
               if: runner.os == 'Windows'
-              run: Compress-Archive -Path emsdk -DestinationPath emsdk-${{ runner.os }}.zip
+              run: Compress-Archive -Path emsdk -DestinationPath emsdk-${{ matrix.artifact_name }}.zip
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v4

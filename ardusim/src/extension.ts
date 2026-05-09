@@ -5,7 +5,6 @@ import * as path from 'path';
 
 let simulatorServer: http.Server | undefined;
 
-// 1. The Secure Local Server
 function startSimulatorServer(workspaceRoot: string): Promise<number> {
     return new Promise((resolve, reject) => {
         if (simulatorServer) {
@@ -13,15 +12,13 @@ function startSimulatorServer(workspaceRoot: string): Promise<number> {
         }
 
         simulatorServer = http.createServer((req, res) => {
-            // Inject the magic headers for WebAssembly Threads (SharedArrayBuffer)
+            // Inject the headers for WebAssembly Threads (SharedArrayBuffer)
             res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
             res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
 
             // Look for the files in the 'build' folder of the open workspace
             const requestUrl = req.url === '/' ? '/ArduSim.html' : req.url;
             const filePath = path.join(workspaceRoot, 'cmake-build-debug-emscripten', requestUrl!);
-
-            console.log(filePath)
 
             fs.readFile(filePath, (err, data) => {
                 if (err) {

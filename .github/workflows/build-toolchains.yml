@@ -55,16 +55,14 @@ jobs:
               if: runner.os != 'Windows'
               run: |
                 rm -rf emsdk/.git
-                rm -rf emsdk/upstream/emscripten/tests
-                rm -rf emsdk/upstream/emscripten/site
+                rm -rf emsdk/upstream/emscripten/test
                 rm -rf emsdk/upstream/emscripten/docs
             
             - name: Remove bloat (win)
               if: runner.os == 'Windows'
               run: |
                 Remove-Item -Recurse -Force emsdk/.git
-                Remove-Item -Recurse -Force emsdk/upstream/emscripten/tests
-                Remove-Item -Recurse -Force emsdk/upstream/emscripten/site
+                Remove-Item -Recurse -Force emsdk/upstream/emscripten/test
                 Remove-Item -Recurse -Force emsdk/upstream/emscripten/docs
 
             - name: Zip toolchain (unix)

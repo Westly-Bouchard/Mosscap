@@ -1,0 +1,74 @@
+name: Generate OS Specific Emscripten Toolchains
+
+on:
+    workflow_dispatch:
+
+jobs:
+    build-toolchain:
+        name: Build SDK for ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                include:
+                    - os: ubuntu-latest
+                      artifact_name: Linux
+                    - os: windows-latest
+                      artifact_name: Windows
+                    - os: macos-13
+                      artifact_name: macOS-Intel
+                    - os: macos-14
+                      artifact_name: macOS-AppleSilicon
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Create Dummy File
+              run: echo "int main() { return 0; }" > dummy.cpp
+
+            - name: Clone and Setup EMSDK
+              run: |
+                git clone https://github.com/emscripten-core/emsdk.git
+                cd emsdk
+                ./emsdk install latest
+                ./emsdk activate latest
+
+            - name: Pre-build Emscripten Cache
+              run: |
+                source emsdk/emsdk_env.sh
+                emcc dummy.cpp -pthread -sUSE_BOOST_HEADERS=1 --use-port=contrib.glfw3 -o dummy.html
+
+            - name: Make SDK Portable
+              run: |
+                cd emsdk
+                ./emsdk activate latest --embedded
+
+            - name: Remove bloat (unix)
+              if: runner.os != 'Windows'
+              run: |
+                rm -rf emsdk/.git
+                rm -rf emsdk/upstream/emscripten/tests
+                rm -rf emsdk/upstream/emscripten/site
+                rm -rf emsdk/upstream/emscripten/docs
+            
+            - name: Remove bloat (win)
+              if: runner.os == 'Windows'
+              run: |
+                Remove-Item -Recurse -Force emsdk/.git
+                Remove-Item -Recurse -Force emsdk/upstream/emscripten/tests
+                Remove-Item -Recurse -Force emsdk/upstream/emscripten/site
+                Remove-Item -Recurse -Force emsdk/upstream/emscripten/docs
+
+            - name: Zip toolchain (unix)
+              if: runner.os != 'Windows'
+              run: zip -r emsdk-${{ runner.os }}.zip emsdk/
+              
+            - name: Zip toolchain (win)
+              if: runner.os == 'Windows'
+              run: Compress-Archive -Path emsdk -DestinationPath emsdk-${{ runner.os }}.zip
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                name: emsdk-${{ runner.os }}
+                path: emsdk-${{ runner.os }}.zip

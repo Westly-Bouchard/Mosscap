@@ -5,14 +5,14 @@ import axios from 'axios';
 import extract from 'extract-zip';
 
 const DOWNLOAD_URLS: Record<string, string> = {
-    'win32-x64': 'http://localhost:8000/emsdk-test.zip',
-    'darwin-x64': 'http://localhost:8000/emsdk-test.zip',
-    'darwin-arm64': 'http://localhost:8000/emsdk-test.zip',
-    'linux-x64': 'http://localhost:8000/emsdk-test.zip'
+    'win32-x64': 'https://github.com/Westly-Bouchard/Mosscap/releases/download/toolchains-v1/emsdk-Windows.zip',
+    'darwin-x64': 'https://github.com/Westly-Bouchard/Mosscap/releases/download/toolchains-v1/emsdk-macOS-Intel.zip',
+    'darwin-arm64': 'https://github.com/Westly-Bouchard/Mosscap/releases/download/toolchains-v1/emsdk-macOS-AppleSilicon.zip',
+    'linux-x64': 'https://github.com/Westly-Bouchard/Mosscap/releases/download/toolchains-v1/emsdk-Linux.zip'
 };
 
 export async function ensureCompilerAvailable(context: vscode.ExtensionContext): Promise<string> {
-    // 1. Determine OS and Architecture
+    // Determine os (and in the case of macOS, architecture)
     const platformKey = `${process.platform}-${process.arch}`;
     const downloadUrl = DOWNLOAD_URLS[platformKey];
 
@@ -20,7 +20,7 @@ export async function ensureCompilerAvailable(context: vscode.ExtensionContext):
         throw new Error(`Unsupported operating system or architecture: ${platformKey}`);
     }
 
-    // 2. Define where the compiler should live (VSCode's global storage for your extension)
+    // Put compiler in global storage
     const storageUri = context.globalStorageUri;
     console.log("STORAGE PATH:", storageUri.fsPath);
     const compilerDir = path.join(storageUri.fsPath, 'emsdk');
@@ -29,15 +29,15 @@ export async function ensureCompilerAvailable(context: vscode.ExtensionContext):
     const executableName = process.platform === 'win32' ? 'emcc.bat' : 'emcc';
     const emccPath = path.join(compilerDir, 'emsdk', 'upstream', 'emscripten', executableName);
 
-    // 3. If it already exists, we are done!
+    // If it's already been downloaded, we can return early
     if (fs.existsSync(emccPath)) {
         return emccPath;
     }
 
-    // 4. If it doesn't exist, download and extract it
+    // If it doesn't exist, then download and extract it
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
-        title: "Downloading Simulator Compiler (First Run Only)...",
+        title: "Downloading Simulator Compiler...",
         cancellable: false
     }, async (progress) => {
         fs.mkdirSync(storageUri.fsPath, { recursive: true });

@@ -81,7 +81,10 @@ inline std::optional<GLFWwindow*> setUpRenderer(const char* windowName) {
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+
+#ifndef __EMSCRIPTEN__
+    glfwSwapInterval(1); // Enable vsync, only on desktop
+#endif
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -101,6 +104,11 @@ inline std::optional<GLFWwindow*> setUpRenderer(const char* windowName) {
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
+
+#ifdef __EMSCRIPTEN__
+    ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
+#endif
+
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     return window;
@@ -120,7 +128,9 @@ inline void render(GLFWwindow* window) {
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    glfwSwapBuffers(window);
+#ifndef __EMSCRIPTEN__
+    glfwSwapBuffers(window); // Only call when running in desktop mode
+#endif
 }
 
 /**

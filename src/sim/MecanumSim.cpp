@@ -2,13 +2,13 @@
 // Created by west on 3/22/26.
 //
 
-#include "MecanumSim.h"
+#include "sim/MecanumSim.h"
 
 #include <cmath>
 #include <ranges>
 #include <sstream>
 
-#include "../plant/MecanumPlant.h"
+#include "plant/MecanumPlant.h"
 
 using namespace std;
 

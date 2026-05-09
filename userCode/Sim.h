@@ -5,16 +5,7 @@
 #ifndef SIM_H
 #define SIM_H
 
-#include "../sim/MecanumSim.h"
-#include "../sim/SimulatorBase.h"
-#include "../arduino/ArduinoRuntime.h"
-
-#include "../hardware/SimEncoder.h"
-#include "../hardware/SimMotor.h"
-
-#include "../util/Renderer.h"
-
-#include "Constants.h"
+#include "sim/MecanumSim.h"
 
 void drawPath();
 
@@ -32,7 +23,7 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     Renderer::getInstance().registerDrawFunction(-2, drawPath);
 
     // Configuration of the robot
-    MecanumConfig config{Constants::CHASSIS_MASS, Constants::TRACKWIDTH, Constants::WHEELBASE, Constants::WHEEL_RADIUS};
+    MecanumConfig config{1.0 /*kg*/, 0.209 /*m*/, 0.1 /*m*/, 0.04 /*m*/};
 
     // Create robot
     auto robot = std::make_unique<MecanumSim>(config);
@@ -50,7 +41,7 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     // Configuration of motors
     // In theory you could have a different config for each motor if you wanted
     // But in this case each motor is exactly the same
-    const MotorConfig mConfig{Constants::Motor::K_V, Constants::Motor::K_T, Constants::Motor::R, Constants::V_BUS};
+    const MotorConfig mConfig{3.1, 0.1245, 2.3, 6.0};
 
     robot->registerMotor(MecanumSim::FL, mConfig, 28);
     robot->registerMotor(MecanumSim::FR, mConfig, 24);

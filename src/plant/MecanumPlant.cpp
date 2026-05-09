@@ -2,7 +2,7 @@
 // Created by west on 3/21/26.
 //
 
-#include "MecanumPlant.h"
+#include "plant/MecanumPlant.h"
 
 #include <cmath>
 

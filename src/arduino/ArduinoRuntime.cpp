@@ -2,13 +2,13 @@
 // Created by Westly Bouchard on 3/2/26.
 //
 
-#include "ArduinoRuntime.h"
+#include "arduino/ArduinoRuntime.h"
 
 #include <chrono>
 #include <thread>
 
-#include "../sim/SimulatorBase.h"
-#include "../hardware/SimButton.h"
+#include "sim/SimulatorBase.h"
+#include "hardware/SimButton.h"
 
 ArduinoRuntime::ArduinoRuntime() : clock(SimulatorBase::getClock()) {}
 

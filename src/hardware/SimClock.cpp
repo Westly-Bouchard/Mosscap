@@ -2,7 +2,7 @@
 // Created by Westly Bouchard on 3/12/26.
 //
 
-#include "SimClock.h"
+#include "hardware/SimClock.h"
 
 double SimClock::readTime() const {
     return time;

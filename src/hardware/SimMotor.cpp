@@ -2,7 +2,7 @@
 // Created by Westly Bouchard on 3/2/26.
 //
 
-#include "SimMotor.h"
+#include "hardware/SimMotor.h"
 
 #include <algorithm>
 #include <cmath>

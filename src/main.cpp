@@ -9,9 +9,21 @@ using namespace std;
 #endif
 #include <GLFW/glfw3.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#include <functional>
+static std::function<void()>            MainLoopForEmscriptenP;
+static void MainLoopForEmscripten()     { MainLoopForEmscriptenP(); }
+#define EMSCRIPTEN_MAINLOOP_BEGIN       MainLoopForEmscriptenP = [&]() { do
+#define EMSCRIPTEN_MAINLOOP_END         while (0); }; emscripten_set_main_loop(MainLoopForEmscripten, 0, true)
+#else
+#define EMSCRIPTEN_MAINLOOP_BEGIN
+#define EMSCRIPTEN_MAINLOOP_END
+#endif
+
 #include "util/graphics.h"
 #include "util/Renderer.h"
-#include "userCode/Sim.h"
+#include "Sim.h"
 
 int main() {
     const auto res = setUpRenderer("441Sim");
@@ -30,7 +42,12 @@ int main() {
 
     auto lastTime = std::chrono::high_resolution_clock::now();
 
-    while (!glfwWindowShouldClose(window)) {
+#ifdef __EMSCRIPTEN__
+    EMSCRIPTEN_MAINLOOP_BEGIN
+#else
+    while (!glfwWindowShouldClose(window))
+#endif
+    {
         /* PHYSICS SIMULATION */
         auto now = std::chrono::high_resolution_clock::now();
         const double frame_dt = std::chrono::duration<double>(now - lastTime).count();
@@ -57,6 +74,9 @@ int main() {
 
         render(window);
     }
+#ifdef __EMSCRIPTEN__
+    EMSCRIPTEN_MAINLOOP_END;
+#endif
 
     cleanup(window);
     return 0;

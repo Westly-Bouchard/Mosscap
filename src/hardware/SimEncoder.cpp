@@ -2,7 +2,7 @@
 // Created by Westly Bouchard on 3/2/26.
 //
 
-#include "SimEncoder.h"
+#include "hardware/SimEncoder.h"
 
 #include <cmath>
 

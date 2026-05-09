@@ -2,7 +2,11 @@
 // Created by Westly Bouchard on 3/2/26.
 //
 
-#include "Drivetrain.h"
+#include "arduino/ArduinoRuntime.h"
+
+#include "arduino/Motor.h"
+
+Motor m(28);
 
 void setup() {
     pinMode(1, INPUT);
@@ -10,14 +14,8 @@ void setup() {
 
 void loop() {
     if (digitalRead(1)) {
-        FL_M.run(100);
-        FR_M.run(100);
-        BL_M.run(100);
-        BR_M.run(100);
+        m.run(255);
     } else {
-        FL_M.run(0);
-        FR_M.run(0);
-        BL_M.run(0);
-        BR_M.run(0);
+        m.run(0);
     }
 }

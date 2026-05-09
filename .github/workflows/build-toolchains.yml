@@ -33,9 +33,17 @@ jobs:
                 ./emsdk install latest
                 ./emsdk activate latest
 
-            - name: Pre-build Emscripten Cache
+            - name: Pre-build Emscripten Cache (unix)
+              if: runner.os != 'Windows'
               run: |
                 source emsdk/emsdk_env.sh
+                emcc dummy.cpp -pthread -sUSE_BOOST_HEADERS=1 --use-port=contrib.glfw3 -o dummy.html
+
+            - name: Pre-build Emscripten Cache (win)
+              if: runner.os == 'Windows'
+              shell: cmd
+              run: |
+                call emsdk\emsdk_env.bat
                 emcc dummy.cpp -pthread -sUSE_BOOST_HEADERS=1 --use-port=contrib.glfw3 -o dummy.html
 
             - name: Make SDK Portable

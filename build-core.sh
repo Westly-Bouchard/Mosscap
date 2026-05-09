@@ -21,7 +21,7 @@ rm -rf sim-core/include/*
 cp sim/build/libsimcore.a sim-core/
 
 # Copy ImGui static library
-cp sim/build/external/libimbui.a sim-core/
+cp sim/build/external/libimgui.a sim-core/
 
 # Copy Mosscap headers
 cp -r sim/include/* sim-core/include/

@@ -12,3 +12,7 @@ tsconfig.json
 
 # emsdk cahce is generated during packaging and is huge, don't include it
 emsdk-cache/**
+
+.github
+.gitmodules
+build-core.sh

@@ -105,6 +105,15 @@ export async function ensureCompilerAvailable(context: vscode.ExtensionContext):
         platform = "Linux";
     }
 
+    switch(`${process.platform}-${process.arch}`) {
+        case 'win32-x64':
+            platform = "Windows";
+            break;
+
+        case 'darwin-x64':
+            platform = "macOS-Intel"
+    }
+
     // Get associated download URL for platform
     const downloadUrl = DOWNLOAD_URLS[platformKey];
 

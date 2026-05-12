@@ -73,8 +73,8 @@ jobs:
               if: runner.os == 'Windows'
               run: Compress-Archive -Path emsdk -DestinationPath emsdk-${{ matrix.artifact_name }}.zip
 
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v4
+            - name: Upload to release
+              uses: softprops/action-gh-release@v2
               with:
-                name: emsdk-${{ matrix.artifact_name }}
-                path: emsdk-${{ matrix.artifact_name }}.zip
+                tag_name: toolchains-v1 
+                files: emsdk-${{ matrix.artifact_name }}.zip

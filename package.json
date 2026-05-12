@@ -15,7 +15,11 @@
     "commands": [
       {
         "command": "mosscap.start",
-        "title": "Start Simulator"
+        "title": "Mosscap: Start Simulator"
+      },
+      {
+        "command": "mosscap.init",
+        "title": "Mosscap: Initialize Environment"
       }
     ]
   },

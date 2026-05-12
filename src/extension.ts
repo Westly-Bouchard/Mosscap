@@ -96,7 +96,42 @@ function startSimulatorServer(workspaceRoot: string): Promise<number> {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('mosscap.start', async () => {
+    let init = vscode.commands.registerCommand('mosscap.init', async () => {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) {
+            vscode.window.showErrorMessage("Please open a folder.");
+            return;
+        }
+
+        const emccPath = await ensureCompilerAvailable(context);
+
+        const rootPath = workspaceFolders[0].uri.fsPath;
+
+        // Create .vscode folder with proper include paths for simulator and emscripten
+        const vsCodePath = path.join(rootPath, '.vscode');
+        if (!fs.existsSync(vsCodePath)) {
+            fs.mkdirSync(vsCodePath);
+        }
+
+        const cppPropertiesPath = path.join(vsCodePath, 'c_cpp_properties.json');
+        try {
+            let content = {
+                "configurations": [
+                    {
+                        "compilerPath": emccPath,
+                        "includePath": [path.join(context.extensionPath, 'sim-core', 'include')],
+                        "cppStandard": "c++23"
+                    }
+                ]
+            }
+            fs.writeFileSync(cppPropertiesPath, JSON.stringify(content));
+        } catch (err) {
+            vscode.window.showErrorMessage(`Failed to create c++ configuration file: ${err}`);
+            return;
+        }
+    });
+
+    let simStart = vscode.commands.registerCommand('mosscap.start', async () => {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (!workspaceFolders) {
             vscode.window.showErrorMessage("Please open a folder containing your simulator build.");
@@ -108,10 +143,11 @@ export function activate(context: vscode.ExtensionContext) {
         try {
             buildChannel.show(true);
             await buildSimulator(rootPath, context);
-            // 1. Start the secure server
+            
+            // Start server
             const port = await startSimulatorServer(rootPath);
 
-            // 2. Open the user's default web browser
+            // Open browser to compiled simulator
             const localUrl = vscode.Uri.parse(`http://127.0.0.1:${port}/sim.html`);
             await vscode.env.openExternal(localUrl);
 
@@ -122,7 +158,8 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(init);
+    context.subscriptions.push(simStart);
 }
 
 export function deactivate() {

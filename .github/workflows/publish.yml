@@ -1,0 +1,51 @@
+name: Publish to Marketplace
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: latest
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build C++ Simulator Core
+        run: npm run build-sim
+
+      - name: Compile Extension
+        run: npm run compile
+
+      - name: Bump Version
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          npm version ${{ github.event.inputs.version_bump }}
+
+      - name: Publish to Marketplace
+        run: npx vsce publish -p ${{ secrets.VSCE_PAT }}

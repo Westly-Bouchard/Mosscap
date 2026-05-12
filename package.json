@@ -9,7 +9,10 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:mosscap.init",
+    "onCommand:mosscap.start"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [

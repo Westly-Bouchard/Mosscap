@@ -1,4 +1,5 @@
 {
+  "publisher": "westly-bouchard",
   "name": "mosscap",
   "displayName": "Mosscap",
   "description": "A simulator for Arduino based educational robots",
@@ -9,10 +10,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:mosscap.init",
-    "onCommand:mosscap.start"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [

@@ -2,6 +2,9 @@ name: Generate OS Specific Emscripten Toolchains
 
 on:
     workflow_dispatch:
+  
+permissions:
+  contents: write
 
 jobs:
     build-toolchain:

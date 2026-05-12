@@ -7,7 +7,7 @@ import { spawn } from 'child_process';
 import { ensureCompilerAvailable } from './compilerManager';
 
 // Create a dedicated output tab for your extension
-const buildChannel = vscode.window.createOutputChannel("Arduino Simulator Build");
+const buildChannel = vscode.window.createOutputChannel("Mosscap Build");
 
 async function buildSimulator(workspaceRoot: string, context: vscode.ExtensionContext): Promise<void> {
     const emccPath = await ensureCompilerAvailable(context);
@@ -37,7 +37,7 @@ async function buildSimulator(workspaceRoot: string, context: vscode.ExtensionCo
                 const ems = "-std=c++23 -pthread -sDISABLE_EXCEPTION_CATCHING=1 -sUSE_BOOST_HEADERS=1 --use-port=contrib.glfw3";
                 const ldflags = "-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=0 -s ASSERTIONS=1 -s PTHREAD_POOL_SIZE=4 -s INITIAL_MEMORY=64MB";
 
-                // The Magic Command
+                // Compile main.cpp and user sketch
                 const compileCommand = `"${emccPath}" "${userSketch}" "${mainCpp}" "${libPath}" "${imguiPath}" -o build/sim.html -I"${workspaceRoot}" -I"${includePath}" ${ems} ${ldflags}`;
 
                 await runCommand(compileCommand, workspaceRoot);

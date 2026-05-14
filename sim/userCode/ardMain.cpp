@@ -2,6 +2,8 @@
 
 #include "arduino/Motor.h"
 
+#include "Sim.h"
+
 Motor lM(10);
 Motor rM(11);
 

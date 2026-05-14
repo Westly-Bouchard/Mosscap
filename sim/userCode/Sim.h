@@ -15,7 +15,7 @@
  * for their code.
  * @return Pointer to sim
  */
-inline std::unique_ptr<SimulatorBase> simInit() {
+std::unique_ptr<SimulatorBase> simInit() {
     // Set rendering scale
     Renderer::setScale(2.0);
 

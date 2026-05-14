@@ -1,5 +1,6 @@
 #include <iostream>
 #include <optional>
+
 using namespace std;
 
 #include <imgui_impl_glfw.h>
@@ -21,9 +22,12 @@ static void MainLoopForEmscripten()     { MainLoopForEmscriptenP(); }
 #define EMSCRIPTEN_MAINLOOP_END
 #endif
 
+#include "sim/SimulatorBase.h"
 #include "util/graphics.h"
 #include "util/Renderer.h"
-#include "Sim.h"
+#include "util/Telemetry.h"
+
+std::unique_ptr<SimulatorBase> simInit();
 
 int main() {
     const auto res = setUpRenderer("441Sim");

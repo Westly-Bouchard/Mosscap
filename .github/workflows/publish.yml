@@ -13,6 +13,9 @@ on:
           - minor
           - major
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -42,10 +45,17 @@ jobs:
         run: npm run compile
 
       - name: Bump Version
+        id: bump # Added an ID to reference the new version if needed
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          npm version ${{ github.event.inputs.version_bump }}
+          # npm version also creates a git tag by default
+          npm version ${{ github.event.inputs.version_bump }} -m "chore: bump version to %s [skip ci]"
+
+      - name: Push Changes
+        run: |
+          # Push the commit and the tag back to the repo
+          git push origin main --follow-tags
 
       - name: Publish to Marketplace
         run: npx vsce publish -p ${{ secrets.VSCE_PAT }}

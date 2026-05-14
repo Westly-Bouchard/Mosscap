@@ -39,7 +39,20 @@ async function buildSimulator(workspaceRoot: string, context: vscode.ExtensionCo
                 const ldflags = "-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=0 -s ASSERTIONS=1 -s PTHREAD_POOL_SIZE=4 -s INITIAL_MEMORY=64MB";
 
                 // Compile main.cpp and user sketch
-                const compileCommand = `"${emccPath}" "${userSketch}" "${mainCpp}" "${libPath}" "${imguiPath}" -o build/sim.html -I"${arduinoIncludePath}" -I"${workspaceRoot}" -I"${includePath}" ${ems} ${ldflags}`;
+                const compileCommand = `\
+                    "${emccPath}" \
+                    "${userSketch}" \
+                    "${mainCpp}" \
+                    "${libPath}" \
+                    "${imguiPath}" \
+                    -o build/sim.html \
+                    -I"${arduinoIncludePath}" \
+                    -I"${workspaceRoot}" \
+                    -I"${includePath}" \
+                    ${ems} \
+                    ${ldflags} \
+                    --shell-file ${path.join(simCoreDir, 'shell.html')}\
+                `;
 
                 await runCommand(compileCommand, workspaceRoot);
                 resolve();

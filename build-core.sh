@@ -36,3 +36,6 @@ cp sim/external/imgui/backends/imgui_impl_opengl3.h sim-core/include/
 
 # Copy main.cpp into core
 cp sim/src/main.cpp sim-core/
+
+# Copy html shell into core
+cp sim/shell.html sim-core/

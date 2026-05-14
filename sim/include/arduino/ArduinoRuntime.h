@@ -15,11 +15,11 @@
 
 #include "Handle.hpp"
 #include "Wire.h"
-#include "../capability/DigitallyReadable.h"
-#include "../capability/ReadableDistance.h"
-#include "../capability/ReadableEncoder.h"
-#include "../capability/ReadableTime.h"
-#include "../capability/WriteablePWM.h"
+#include "capability/DigitallyReadable.h"
+#include "capability/ReadableDistance.h"
+#include "capability/ReadableEncoder.h"
+#include "capability/ReadableTime.h"
+#include "capability/WriteablePWM.h"
 
 /**
  * Setup function from user code

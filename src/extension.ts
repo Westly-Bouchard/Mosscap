@@ -33,12 +33,13 @@ async function buildSimulator(workspaceRoot: string, context: vscode.ExtensionCo
                 const libPath = path.join(simCoreDir, 'libsimcore.a');
                 const imguiPath = path.join(simCoreDir, 'libimgui.a');
                 const includePath = path.join(simCoreDir, 'include');
+                const arduinoIncludePath = path.join(simCoreDir, 'include', 'arduino');
 
                 const ems = "-std=c++23 -pthread -sDISABLE_EXCEPTION_CATCHING=1 -sUSE_BOOST_HEADERS=1 --use-port=contrib.glfw3";
                 const ldflags = "-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=0 -s ASSERTIONS=1 -s PTHREAD_POOL_SIZE=4 -s INITIAL_MEMORY=64MB";
 
                 // Compile main.cpp and user sketch
-                const compileCommand = `"${emccPath}" "${userSketch}" "${mainCpp}" "${libPath}" "${imguiPath}" -o build/sim.html -I"${workspaceRoot}" -I"${includePath}" ${ems} ${ldflags}`;
+                const compileCommand = `"${emccPath}" "${userSketch}" "${mainCpp}" "${libPath}" "${imguiPath}" -o build/sim.html -I"${arduinoIncludePath}" -I"${workspaceRoot}" -I"${includePath}" ${ems} ${ldflags}`;
 
                 await runCommand(compileCommand, workspaceRoot);
                 resolve();
@@ -119,7 +120,10 @@ export function activate(context: vscode.ExtensionContext) {
                 "configurations": [
                     {
                         "compilerPath": emccPath,
-                        "includePath": [path.join(context.extensionPath, 'sim-core', 'include')],
+                        "includePath": [
+                            path.join(context.extensionPath, 'sim-core', 'include'),
+                            path.join(context.extensionPath, 'sim-core', 'include', 'arduino')
+                        ],
                         "cppStandard": "c++23"
                     }
                 ]

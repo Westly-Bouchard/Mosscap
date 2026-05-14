@@ -41,6 +41,7 @@ add_executable(sim src/main.cpp ${USER_SRC})
 
 target_include_directories(sim PRIVATE "include")
 target_include_directories(sim PRIVATE "userCode")
+target_include_directories(sim PRIVATE "include/arduino")
 
 target_link_libraries(sim simcore imgui)
 

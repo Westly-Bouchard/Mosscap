@@ -30,7 +30,7 @@ static void MainLoopForEmscripten()     { MainLoopForEmscriptenP(); }
 std::unique_ptr<SimulatorBase> simInit();
 
 int main() {
-    const auto res = setUpRenderer("441Sim");
+    const auto res = setUpRenderer("Mosscap");
 
     GLFWwindow* window;
     if (res.has_value()) {

@@ -5,9 +5,9 @@
 #ifndef SIM_H
 #define SIM_H
 
-#include "sim/MecanumSim.h"
+#include "sim/TankSim.h"
 
-void drawPath();
+// void drawPath();
 
 /**
  * Initialize the simulator
@@ -17,16 +17,17 @@ void drawPath();
  */
 inline std::unique_ptr<SimulatorBase> simInit() {
     // Set rendering scale
-    Renderer::setScale(3.0);
+    Renderer::setScale(2.0);
 
     // Tells the renderer to draw the course (green lines) below the robot
-    Renderer::getInstance().registerDrawFunction(-2, drawPath);
+    // Renderer::getInstance().registerDrawFunction(-2, drawPath);
 
     // Configuration of the robot
-    MecanumConfig config{1.0 /*kg*/, 0.209 /*m*/, 0.1 /*m*/, 0.04 /*m*/};
+    WMRConfig config{2.0 /*kg*/, 0.20 /*m*/, 0.15 /*m*/, 0.04 /*m*/};
+    config.showTOFTelemetry = false;
 
     // Create robot
-    auto robot = std::make_unique<MecanumSim>(config);
+    auto robot = std::make_unique<TankSim>(config);
     // robot->setPose(2.5, 1.2, 90);
     robot->setPose(1.5, 1.5, 0);
 
@@ -34,7 +35,7 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     tofConfig.boundingBox = BoundingBox(3, 3);
 
     // Add an obstacle for the sensor to detect
-    tofConfig.obstacles.push_back(std::make_shared<Box>(1.0, 0.25, Vec{1.5, 2.0}, 0));
+    // tofConfig.obstacles.push_back(std::make_shared<Box>(1.0, 0.25, Vec{1.5, 2.0}, 0));
 
     robot->registerTOF(tofConfig);
 
@@ -43,44 +44,40 @@ inline std::unique_ptr<SimulatorBase> simInit() {
     // But in this case each motor is exactly the same
     const MotorConfig mConfig{3.1, 0.1245, 2.3, 6.0};
 
-    robot->registerMotor(MecanumSim::FL, mConfig, 28);
-    robot->registerMotor(MecanumSim::FR, mConfig, 24);
-    robot->registerMotor(MecanumSim::BL, mConfig, 4);
-    robot->registerMotor(MecanumSim::BR, mConfig, 7);
+    robot->registerLeftMotor(mConfig, 10);
+    robot->registerRightMotor(mConfig, 11);
 
-    robot->registerEncoder(MecanumSim::FL, 1500, 3);
-    robot->registerEncoder(MecanumSim::FR, 1500, 2);
-    robot->registerEncoder(MecanumSim::BL, 1500, 19);
-    robot->registerEncoder(MecanumSim::BR, 1500, 18);
+    robot->registerLeftEncoder(1500, 20);
+    robot->registerRightEncoder(1500, 21);
 
     ArduinoRuntime::getInstance().createButton("Test", 1);
 
     return robot;
 }
 
-void drawPath() {
-    static constexpr std::array<std::pair<double, double>, 8> pathPoints = {{
-        {1.0, 0.3},
-        {-0.4, 0.3},
-        {-0.4, 1.2},
-        {-1.0, 1.2},
-        {-1.0, -0.6},
-        {0.0, -0.6},
-        {0.0, -1.2},
-        {1.0, -1.2}
-    }};
-
-    std::array<ImVec2, pathPoints.size() + 1> vertices;
-    for (auto&& [p, v] : std::views::zip(pathPoints, vertices)) {
-        v.x = p.first * pxPerMeter + 400;
-        v.y = p.second * pxPerMeter + 400;
-    }
-
-    // This is kind of hacky but whatever
-    vertices.at(8) = vertices.at(0);
-    vertices.at(8).y += 3.1;
-
-    ImGui::GetWindowDrawList()->AddPolyline(vertices.data(), vertices.size(), 0xFF00FF00, 0, 7.0);
-}
+// void drawPath() {
+//     static constexpr std::array<std::pair<double, double>, 8> pathPoints = {{
+//         {1.0, 0.3},
+//         {-0.4, 0.3},
+//         {-0.4, 1.2},
+//         {-1.0, 1.2},
+//         {-1.0, -0.6},
+//         {0.0, -0.6},
+//         {0.0, -1.2},
+//         {1.0, -1.2}
+//     }};
+//
+//     std::array<ImVec2, pathPoints.size() + 1> vertices;
+//     for (auto&& [p, v] : std::views::zip(pathPoints, vertices)) {
+//         v.x = p.first * pxPerMeter + 400;
+//         v.y = p.second * pxPerMeter + 400;
+//     }
+//
+//     // This is kind of hacky but whatever
+//     vertices.at(8) = vertices.at(0);
+//     vertices.at(8).y += 3.1;
+//
+//     ImGui::GetWindowDrawList()->AddPolyline(vertices.data(), vertices.size(), 0xFF00FF00, 0, 7.0);
+// }
 
 #endif //SIM_H

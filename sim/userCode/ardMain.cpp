@@ -2,7 +2,8 @@
 
 #include "arduino/Motor.h"
 
-Motor m(28);
+Motor lM(10);
+Motor rM(11);
 
 void setup() {
     pinMode(1, INPUT);
@@ -10,8 +11,10 @@ void setup() {
 
 void loop() {
     if (digitalRead(1)) {
-        m.run(200);
+        lM.run(-150);
+        rM.run(150);
     } else {
-        m.run(0);
+        lM.run(0);
+        rM.run(0);
     }
 }

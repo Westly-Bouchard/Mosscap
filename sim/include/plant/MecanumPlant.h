@@ -6,7 +6,7 @@
 #define INC_441SIM_MECANUMPLANT_H
 
 #include "Plant.hpp"
-#include "../config/MecanumConfig.h"
+#include "config/WMRConfig.h"
 
 /**
  * Dynamics system for a robot with
@@ -15,10 +15,10 @@
 class MecanumPlant final : public Plant<6, 4> {
 public:
     /**
-     * Construct a plant object with the provided @link MecanumConfig
+     * Construct a plant object with the provided @link WMRConfig
      * @param config Configuration of the system
      */
-    explicit MecanumPlant(const MecanumConfig& config);
+    explicit MecanumPlant(const WMRConfig& config);
 
     /**
      * To be used when stepping a system, inherited from @link Plant
@@ -32,7 +32,7 @@ private:
     /**
      * Necessary physical constants for force calculations
      */
-    const MecanumConfig& config;
+    const WMRConfig& config;
 };
 
 #endif //INC_441SIM_MECANUMPLANT_H

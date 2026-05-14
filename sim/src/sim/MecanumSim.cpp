@@ -12,7 +12,7 @@
 
 using namespace std;
 
-MecanumSim::MecanumSim(const MecanumConfig &config)
+MecanumSim::MecanumSim(const WMRConfig &config)
                         :  config(config) {
     // Not sure why I can't just pass the config param
     // Mecanum plant ctor also passes by const ref and copies

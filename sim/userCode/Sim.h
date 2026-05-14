@@ -17,13 +17,14 @@
  */
 inline std::unique_ptr<SimulatorBase> simInit() {
     // Set rendering scale
-    Renderer::setScale(3.0);
+    Renderer::setScale(2.0);
 
     // Tells the renderer to draw the course (green lines) below the robot
     // Renderer::getInstance().registerDrawFunction(-2, drawPath);
 
     // Configuration of the robot
     WMRConfig config{2.0 /*kg*/, 0.20 /*m*/, 0.15 /*m*/, 0.04 /*m*/};
+    config.showTOFTelemetry = false;
 
     // Create robot
     auto robot = std::make_unique<TankSim>(config);

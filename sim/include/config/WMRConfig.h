@@ -17,6 +17,10 @@ struct WMRConfig {
     const double wheelRadius;
     const double inertia;
 
+    // These allow unnecessary telemetry data to be turned off when a user is first experiencing the simulator
+    bool showEncoderTelemetry = true;
+    bool showTOFTelemetry = true;
+
     /**
      * Construct a mecanum config object with provided physical constants
      * @param m Total mass of the robot in kilograms

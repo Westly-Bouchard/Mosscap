@@ -181,21 +181,23 @@ void TankSim::write() const {
         Telemetry::text(ss.str());
     }
 
-    ss.str("");
-
-    if (Telemetry::section("Encoders")) {
-        ss << "Left counts: " << leftEncoder->readCount();
-        Telemetry::text(ss.str());
+    if (config.showEncoderTelemetry) {
         ss.str("");
-        ss << "Right counts: " << rightEncoder->readCount();
-        Telemetry::text(ss.str());
-        ss.str("");
+        if (Telemetry::section("Encoders")) {
+            ss << "Left counts: " << leftEncoder->readCount();
+            Telemetry::text(ss.str());
+            ss.str("");
+            ss << "Right counts: " << rightEncoder->readCount();
+            Telemetry::text(ss.str());
+            ss.str("");
+        }
     }
 
-    ss.str("");
-
-    if (Telemetry::section("TOF")) {
-        ss << "Current reading: " << tof->getDist();
-        Telemetry::text(ss.str());
+    if (config.showTOFTelemetry) {
+        ss.str("");
+        if (Telemetry::section("TOF")) {
+            ss << "Current reading: " << tof->getDist();
+            Telemetry::text(ss.str());
+        }
     }
 }

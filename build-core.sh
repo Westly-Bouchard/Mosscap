@@ -14,8 +14,11 @@ make -j4
 cd ../../
 
 # Create sim-core directory
+mkdir -p sim-core
+rm -rf sim-core/*
 mkdir -p sim-core/include
-rm -rf sim-core/include/*
+mkdir -p sim-core/include/mosscap
+mkdir -p sim-core/include/imgui
 
 # Copy compiled library
 cp sim/build/libsimcore.a sim-core/

@@ -162,8 +162,26 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    let openDemo = vscode.commands.registerCommand('mosscap.demo', async () => {
+        try {
+            const demoPath = path.join(context.extensionPath, 'demos', 'intro');
+            await buildSimulator(demoPath, context);
+
+            const port = await startSimulatorServer(demoPath);
+
+            const localUrl = vscode.Uri.parse(`http://127.0.0.1:${port}/sim.html`);
+            await vscode.env.openExternal(localUrl);
+
+            vscode.window.showInformationMessage(`Simulator running in browser on port ${port}`);
+
+        } catch (error) {
+            vscode.window.showErrorMessage(`Failed to start demo: ${error}`);
+        }
+    });
+
     context.subscriptions.push(init);
     context.subscriptions.push(simStart);
+    context.subscriptions.push(openDemo);
 }
 
 export function deactivate() {

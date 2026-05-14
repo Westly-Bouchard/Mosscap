@@ -21,6 +21,10 @@
       {
         "command": "mosscap.init",
         "title": "Mosscap: Initialize Environment"
+      },
+      {
+        "command": "mosscap.demo",
+        "title": "Mosscap: Open Demo"
       }
     ]
   },

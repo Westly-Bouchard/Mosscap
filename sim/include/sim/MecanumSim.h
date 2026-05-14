@@ -8,7 +8,7 @@
 #include <array>
 
 #include "Simulator.hpp"
-#include "../config/MecanumConfig.h"
+#include "../config/WMRConfig.h"
 #include "../hardware/SimMotor.h"
 #include "../hardware/SimEncoder.h"
 #include "../hardware/SimTOF.h"
@@ -24,7 +24,7 @@ public:
      * Construct a simulator with the given config
      * @param config Configuration of the system
      */
-    explicit MecanumSim(const MecanumConfig &config);
+    explicit MecanumSim(const WMRConfig &config);
 
     /**
      * Draw robot state to ImGui window
@@ -68,7 +68,7 @@ private:
     /**
      * System configuration
      */
-    const MecanumConfig config;
+    const WMRConfig config;
 
     /**
      * Simulated hardware

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-MecanumPlant::MecanumPlant(const MecanumConfig& config) : config(config) {}
+MecanumPlant::MecanumPlant(const WMRConfig& config) : config(config) {}
 
 void MecanumPlant::operator()(const state_t &x, state_t &dxdt, double t) const {
     // Calculate forces in the body frame

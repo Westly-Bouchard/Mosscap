@@ -10,7 +10,7 @@
 /**
  * Configuration of a robot with mecanum drive base
  */
-struct MecanumConfig {
+struct WMRConfig {
     const double mass;
     const double trackWidth;
     const double wheelBase;
@@ -24,7 +24,7 @@ struct MecanumConfig {
      * @param wB Wheelbase of the robot in meters
      * @param wR Wheel radius of the robot in meters
      */
-    MecanumConfig(const double m, const double tW, const double wB, const double wR) : mass(m), trackWidth(tW),
+    WMRConfig(const double m, const double tW, const double wB, const double wR) : mass(m), trackWidth(tW),
         wheelBase(wB), wheelRadius(wR), inertia(getInertia()) {}
 
 private:
